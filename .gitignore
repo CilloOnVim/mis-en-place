@@ -1,0 +1,13 @@
+# Ignore macOS system files
+.DS_Store
+
+# Ignore Docker database volume data
+# THIS IS CRITICAL. Never push the raw database files.
+db-init/db_data/
+**/db_data/
+
+# Ignore Node.js modules (we will need this for the next phase)
+node_modules/
+
+# Ignore environment variables (if we add a .env file later)
+.env

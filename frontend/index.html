@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mise en Place</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 50px; text-align: center; }
+        .container { max-width: 400px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .hidden { display: none; }
+        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
+        button { width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #218838; }
+        .toggle-link { color: #007bff; cursor: pointer; text-decoration: underline; margin-top: 15px; display: block; font-size: 14px; }
+        #dashboard-section { max-width: 600px; }
+        .logout-btn { background-color: #dc3545; margin-top: 20px; }
+        .logout-btn:hover { background-color: #c82333; }
+    </style>
+</head>
+<body>
+
+    <div id="register-section" class="container">
+        <h2>Sign Up for Mise en Place</h2>
+        <input type="email" id="reg-email" placeholder="Email Address">
+        <input type="password" id="reg-password" placeholder="Password">
+        <button onclick="registerUser()">Register</button>
+        <span class="toggle-link" onclick="showSection('login-section')">Already have an account? Log in</span>
+    </div>
+
+    <div id="login-section" class="container hidden">
+        <h2>Log In</h2>
+        <input type="email" id="login-email" placeholder="Email Address">
+        <input type="password" id="login-password" placeholder="Password">
+        <button onclick="loginUser()">Log In</button>
+        <span class="toggle-link" onclick="showSection('register-section')">Need an account? Sign up</span>
+    </div>
+
+    <div id="dashboard-section" class="container hidden">
+        <h2 id="dash-greeting">Loading Dashboard...</h2>
+        <p id="dash-bio"></p>
+        <button class="logout-btn" onclick="logoutUser()">Log Out</button>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+
+        // --- UI Logic ---
+        function showSection(sectionId) {
+            document.getElementById('register-section').classList.add('hidden');
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.add('hidden');
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
+        // Check if user is already logged in on page load
+        window.onload = () => {
+            if (localStorage.getItem('jwt')) {
+                loadDashboard();
+            } else {
+                showSection('login-section');
+            }
+        };
+
+        // --- API Calls ---
+
+        async function registerUser() {
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/register.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Registration successful! You can now log in.');
+                    showSection('login-section');
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Failed to connect to the server.');
+            }
+        }
+
+        async function loginUser() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/login.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Save the token to the browser's local storage
+                    localStorage.setItem('jwt', data.token);
+                    document.getElementById('login-email').value = '';
+                    document.getElementById('login-password').value = '';
+                    loadDashboard();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Failed to connect to the server.');
+            }
+        }
+
+        async function loadDashboard() {
+            const token = localStorage.getItem('jwt');
+            if (!token) {
+                showSection('login-section');
+                return;
+            }
+
+            // Show dashboard early so user sees it loading
+            showSection('dashboard-section');
+
+            try {
+                const response = await fetch(`${API_BASE}/profile/dashboard.php`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('dash-greeting').innerText = `Welcome, ${data.data.display_name}`;
+                    document.getElementById('dash-bio').innerText = data.data.bio;
+                } else {
+                    // Token is invalid or expired
+                    alert('Session expired. Please log in again.');
+                    logoutUser();
+                }
+            } catch (error) {
+                document.getElementById('dash-greeting').innerText = 'Failed to load data.';
+            }
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('jwt');
+            showSection('login-section');
+        }
+    </script>
+</body>
+</html>

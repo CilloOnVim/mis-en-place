@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # 1. The Database (One server, multiple DBs)
+  db:
+    image: mysql:8.0
+    container_name: mise_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - ./db-init:/docker-entrypoint-initdb.d # Runs scripts here on startup
+      - db_data:/var/lib/mysql # Persists data even if container dies
+    networks:
+      - backend
+
+  # 2. Auth Service (PHP)
+  auth:
+    build: ./auth-service
+    container_name: mise_auth
+    volumes:
+      - ./auth-service/src:/var/www/html # Live code editing
+    depends_on:
+      - db
+    networks:
+      - backend
+
+  # 3. Profile Service (PHP)
+  profile:
+    build: ./profile-service
+    container_name: mise_profile
+    volumes:
+      - ./profile-service/src:/var/www/html # Live code editing
+    depends_on:
+      - db
+    networks:
+      - backend
+
+  # 4. API Gateway (Nginx)
+  gateway:
+    image: nginx:alpine
+    container_name: mise_gateway
+    ports:
+      - "8080:80" # Access via localhost:8080
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - auth
+      - profile
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  db_data:
