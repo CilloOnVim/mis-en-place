@@ -35,7 +35,18 @@ services:
     networks:
       - backend
 
-  # 4. API Gateway (Nginx)
+# 4. Post Service (PHP)
+  post:
+    build: ./post-service
+    container_name: mise_post
+    volumes:
+      - ./post-service/src:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - backend
+
+  # 5. API Gateway (Nginx)
   gateway:
     image: nginx:alpine
     container_name: mise_gateway
@@ -46,6 +57,7 @@ services:
     depends_on:
       - auth
       - profile
+      - post
     networks:
       - backend
 

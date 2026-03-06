@@ -1,43 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mise en Place</title>
+    <title>Mise en Place — Welcome</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 50px; text-align: center; }
-        .container { max-width: 400px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        .hidden { display: none; }
-        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
-        button { width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background-color: #218838; }
-        .toggle-link { color: #007bff; cursor: pointer; text-decoration: underline; margin-top: 15px; display: block; font-size: 14px; }
-        #dashboard-section { max-width: 600px; }
-        .logout-btn { background-color: #dc3545; margin-top: 20px; }
-        .logout-btn:hover { background-color: #c82333; }
+        :root {
+            --clay: #C4713A;
+            --amber: #E8A44A;
+            --cream: #FAF3E8;
+            --dark: #1A110A;
+            --bark: #3D2314;
+            --bg: #F5EDE0;
+            --card: #FFFDF8;
+            --border: rgba(196, 113, 58, 0.15);
+            --text: #1A110A;
+            --muted: rgba(26, 17, 10, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Background aesthetic */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(196, 113, 58, 0.1) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at -10% 100%, rgba(232, 164, 74, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Clean, elevated card design */
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card);
+            padding: 48px 40px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 16px 40px rgba(196, 113, 58, 0.08);
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .brand-header {
+            margin-bottom: 32px;
+        }
+
+        .logo-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--clay);
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 8px 24px rgba(196, 113, 58, 0.3);
+            margin-bottom: 16px;
+        }
+
+        .container h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .container p.subtitle {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 24px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Modernized Inputs matching the modal */
+        input {
+            width: 100%;
+            padding: 14px 18px;
+            margin-bottom: 16px;
+            border: 1.5px solid rgba(26, 17, 10, 0.12);
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--dark);
+            background: var(--card);
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--clay);
+            box-shadow: 0 0 0 4px rgba(196, 113, 58, 0.1);
+        }
+
+        input::placeholder {
+            color: var(--muted);
+        }
+
+        /* Polished Buttons */
+        button {
+            width: 100%;
+            padding: 14px;
+            background: var(--clay);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background: var(--bark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(196, 113, 58, 0.25);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--clay);
+            margin-top: 32px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(196, 113, 58, 0.05);
+            border-color: var(--clay);
+            box-shadow: none;
+        }
+
+        /* Subtle Toggle Links */
+        .toggle-link {
+            color: var(--muted);
+            cursor: pointer;
+            text-decoration: none;
+            margin-top: 24px;
+            display: inline-block;
+            font-size: 13px;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+
+        .toggle-link:hover {
+            color: var(--clay);
+        }
+
+        .toggle-link strong {
+            color: var(--dark);
+        }
+
+        /* Dashboard Specifics */
+        #dashboard-section {
+            max-width: 500px;
+            padding: 56px 48px;
+        }
+
+        #dash-greeting {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: var(--dark);
+        }
+
+        #dash-greeting em {
+            color: var(--clay);
+            font-style: italic;
+        }
+
+        #dash-bio {
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 15px;
+            margin-top: 16px;
+            padding: 16px;
+            background: rgba(196, 113, 58, 0.04);
+            border-radius: 12px;
+            border: 1px dashed var(--border);
+        }
     </style>
 </head>
+
 <body>
 
     <div id="register-section" class="container">
-        <h2>Sign Up for Mise en Place</h2>
+        <div class="brand-header">
+            <div class="logo-icon">🍳</div>
+            <h2>Join Mise <em>en Place</em></h2>
+            <p class="subtitle">Your community kitchen awaits.</p>
+        </div>
         <input type="email" id="reg-email" placeholder="Email Address">
         <input type="password" id="reg-password" placeholder="Password">
-        <button onclick="registerUser()">Register</button>
-        <span class="toggle-link" onclick="showSection('login-section')">Already have an account? Log in</span>
+        <button onclick="registerUser()">Create Account</button>
+        <span class="toggle-link" onclick="showSection('login-section')">Already have an account? <strong>Log
+                in</strong></span>
     </div>
 
     <div id="login-section" class="container hidden">
-        <h2>Log In</h2>
+        <div class="brand-header">
+            <div class="logo-icon">🍳</div>
+            <h2>Welcome Back</h2>
+            <p class="subtitle">Sign in to access your recipes.</p>
+        </div>
         <input type="email" id="login-email" placeholder="Email Address">
         <input type="password" id="login-password" placeholder="Password">
         <button onclick="loginUser()">Log In</button>
-        <span class="toggle-link" onclick="showSection('register-section')">Need an account? Sign up</span>
+        <span class="toggle-link" onclick="showSection('register-section')">Need an account? <strong>Sign
+                up</strong></span>
     </div>
 
     <div id="dashboard-section" class="container hidden">
-        <h2 id="dash-greeting">Loading Dashboard...</h2>
+        <div class="logo-icon" style="width: 48px; height: 48px; font-size: 24px;">🧑‍🍳</div>
+        <h2 id="dash-greeting">Loading...</h2>
         <p id="dash-bio"></p>
+        <button class="logout-btn" onclick="logoutUser()">🚪 Log Out</button>
+    </div>
+
+    <div id="admin-dashboard-section" class="container hidden" style="border-top: 5px solid #dc3545;">
+        <h2 id="admin-greeting">Admin Control Panel</h2>
+        <p>Welcome to the backend management interface.</p>
         <button class="logout-btn" onclick="logoutUser()">Log Out</button>
     </div>
 
@@ -62,7 +293,6 @@
         };
 
         // --- API Calls ---
-
         async function registerUser() {
             const email = document.getElementById('reg-email').value;
             const password = document.getElementById('reg-password').value;
@@ -73,9 +303,9 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
-                
+
                 const data = await response.json();
-                
+
                 if (response.ok) {
                     alert('Registration successful! You can now log in.');
                     showSection('login-section');
@@ -101,8 +331,8 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Save the token to the browser's local storage
                     localStorage.setItem('jwt', data.token);
+                    localStorage.setItem('role', data.role); // Save the role
                     document.getElementById('login-email').value = '';
                     document.getElementById('login-password').value = '';
                     loadDashboard();
@@ -116,11 +346,18 @@
 
         async function loadDashboard() {
             const token = localStorage.getItem('jwt');
+            const role = localStorage.getItem('role'); // Get the role
+
             if (!token) {
                 showSection('login-section');
                 return;
             }
 
+            // Route based on role
+            if (role === 'admin') {
+                showSection('admin-dashboard-section');
+                return; // Stop here, admins don't load the normal chef dashboard yet
+            }
             // Show dashboard early so user sees it loading
             showSection('dashboard-section');
 
@@ -135,8 +372,8 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    document.getElementById('dash-greeting').innerText = `Welcome, ${data.data.display_name}`;
-                    document.getElementById('dash-bio').innerText = data.data.bio;
+                    document.getElementById('dash-greeting').innerHTML = `Welcome, <em>${data.data.display_name}</em>`;
+                    document.getElementById('dash-bio').innerText = data.data.bio || "No bio available.";
                 } else {
                     // Token is invalid or expired
                     alert('Session expired. Please log in again.');
@@ -149,8 +386,11 @@
 
         function logoutUser() {
             localStorage.removeItem('jwt');
+            localStorage.removeItem('role');
             showSection('login-section');
         }
+
     </script>
 </body>
+
 </html>

@@ -16,21 +16,28 @@ require 'jwt.php';
 $data = json_decode(file_get_contents("php://input"));
 
 if (!empty($data->email) && !empty($data->password)) {
-    $stmt = $pdo->prepare("SELECT id, password_hash FROM users WHERE email = ?");
+    // We are now fetching the role column too
+    $stmt = $pdo->prepare("SELECT id, password_hash, role FROM users WHERE email = ?");
     $stmt->execute([$data->email]);
     $user = $stmt->fetch();
 
     if ($user && password_verify($data->password, $user['password_hash'])) {
-        // Create the payload holding the user's ID
+        // Inject the role into the JWT payload
         $payload = [
             'user_id' => $user['id'],
-            'exp' => time() + 3600 // Token expires in 1 hour
+            'role' => $user['role'], 
+            'exp' => time() + 3600
         ];
         
         $token = generate_jwt($payload);
         
         http_response_code(200);
-        echo json_encode(['message' => 'Login successful', 'token' => $token]);
+        // Send the role back in the JSON response so the frontend knows immediately
+        echo json_encode([
+            'message' => 'Login successful', 
+            'token' => $token, 
+            'role' => $user['role']
+        ]);
     } else {
         http_response_code(401);
         echo json_encode(['error' => 'Invalid credentials']);
