@@ -28,16 +28,20 @@ $user_id = $payload['user_id'];
 $data = json_decode(file_get_contents("php://input"));
 
 if (!empty($data->title) && !empty($data->description)) {
+    // Catch the author name from the frontend
+    $author_name = $data->author_name ?? 'Unknown Chef';
     $category = $data->category ?? 'General';
     $points_cost = $data->points_cost ?? 0;
     
     // In the future, frontend will send ingredients here. For now, empty JSON object.
     $recipe_data = json_encode($data->recipe_data ?? []); 
 
-    $stmt = $pdo->prepare("INSERT INTO posts (user_id, title, description, category, points_cost, recipe_data) VALUES (?, ?, ?, ?, ?, ?)");
+    // Updated SQL to include author_name
+    $stmt = $pdo->prepare("INSERT INTO posts (user_id, author_name, title, description, category, points_cost, recipe_data) VALUES (?, ?, ?, ?, ?, ?, ?)");
     
     try {
-        $stmt->execute([$user_id, $data->title, $data->description, $category, $points_cost, $recipe_data]);
+        // Updated execute array to pass $author_name
+        $stmt->execute([$user_id, $author_name, $data->title, $data->description, $category, $points_cost, $recipe_data]);
         http_response_code(201);
         echo json_encode(['message' => 'Recipe published successfully!', 'post_id' => $pdo->lastInsertId()]);
     } catch (Exception $e) {

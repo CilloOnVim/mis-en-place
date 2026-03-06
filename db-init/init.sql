@@ -37,12 +37,13 @@ USE post_db;
 
 CREATE TABLE IF NOT EXISTS posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL, -- Ties back to the creator
+    user_id INT NOT NULL,
+    author_name VARCHAR(255) DEFAULT 'Unknown Chef', -- This is the missing link
     title VARCHAR(255) NOT NULL,
     description TEXT,
     category VARCHAR(100),
     points_cost INT DEFAULT 0,
-    recipe_data JSON, -- This holds the ingredients, quantities, and steps
+    recipe_data JSON,
     likes_count INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

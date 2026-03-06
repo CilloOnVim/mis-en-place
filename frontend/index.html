@@ -1,396 +1,442 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mise en Place — Welcome</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap"
-        rel="stylesheet" />
-    <style>
-        :root {
-            --clay: #C4713A;
-            --amber: #E8A44A;
-            --cream: #FAF3E8;
-            --dark: #1A110A;
-            --bark: #3D2314;
-            --bg: #F5EDE0;
-            --card: #FFFDF8;
-            --border: rgba(196, 113, 58, 0.15);
-            --text: #1A110A;
-            --muted: rgba(26, 17, 10, 0.5);
-        }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mise en Place</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Cormorant+Garamond:ital,wght@1,300&display=swap" rel="stylesheet"/>
+  <style>
+    /* --- CORE VARIABLES & RESET --- */
+    :root {
+      --clay:   #C4713A;
+      --amber:  #E8A44A;
+      --cream:  #FAF3E8;
+      --dark:   #1A110A;
+      --bark:   #3D2314;
+      --sage:   #7C8C6E;
+      --leaf:   #4A5C3A;
+      --white:  #FFFDF8;
+      --bg:     #F5EDE0;
+      --card:   #FFFDF8;
+      --border: rgba(196,113,58,0.15);
+      --text:   #1A110A;
+      --muted:  rgba(26,17,10,0.5);
+      --sidebar-w: 260px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; overflow-x: hidden; }
+    .hidden { display: none !important; }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    /* --- AUTH SCREENS (LOGIN / REGISTER) --- */
+    #auth-wrapper { width: 100%; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .auth-container { width: 100%; max-width: 400px; background: var(--white); padding: 40px; border-radius: 16px; box-shadow: 0 12px 32px rgba(196,113,58,0.12); border: 1px solid var(--border); text-align: center; }
+    .auth-container h2 { font-family: 'Playfair Display', serif; color: var(--dark); margin-bottom: 20px; font-size: 24px; }
+    .auth-input { width: 100%; padding: 12px 16px; margin: 10px 0; border: 1.5px solid rgba(26,17,10,0.12); border-radius: 10px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s; }
+    .auth-input:focus { border-color: var(--clay); }
+    .auth-btn { width: 100%; padding: 12px; background-color: var(--clay); color: var(--white); border: none; border-radius: 10px; cursor: pointer; font-weight: 500; font-family: 'DM Sans', sans-serif; margin-top: 10px; transition: background 0.2s; }
+    .auth-btn:hover { background-color: var(--bark); }
+    .auth-link { color: var(--clay); cursor: pointer; text-decoration: none; margin-top: 20px; display: block; font-size: 13px; font-weight: 500; }
+    .auth-link:hover { text-decoration: underline; }
 
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text);
-            position: relative;
-            overflow: hidden;
-        }
+    /* --- DASHBOARD WRAPPER --- */
+    #dashboard-wrapper { width: 100%; display: flex; }
 
-        /* Background aesthetic */
-        body::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(196, 113, 58, 0.1) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 80% at -10% 100%, rgba(232, 164, 74, 0.08) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: 0;
-        }
+    /* --- SIDEBAR --- */
+    .sidebar { width: var(--sidebar-w); background: var(--dark); min-height: 100vh; display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; overflow: hidden; }
+    .sidebar-brand { padding: 28px 24px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .logo-icon { width: 40px; height: 40px; background: var(--clay); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .brand-text { flex: 1; }
+    .brand-name { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--cream); line-height: 1; }
+    .brand-name em { color: var(--amber); font-style: italic; }
+    .brand-tagline { font-size: 10px; color: rgba(250,243,232,0.35); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 3px; }
+    .sidebar-user { padding: 20px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 12px; }
+    .user-avatar { width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, var(--clay), var(--amber)); display: flex; align-items: center; justify-content: center; font-size: 18px; position: relative; }
+    .user-info { flex: 1; min-width: 0; }
+    .user-name { font-size: 14px; font-weight: 500; color: var(--cream); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-role { font-size: 11px; color: var(--amber); letter-spacing: 0.5px; }
+    .sidebar-nav { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
+    .nav-section-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(250,243,232,0.25); padding: 12px 10px 6px; font-weight: 500; }
+    .nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px; color: rgba(250,243,232,0.55); font-size: 14px; cursor: pointer; border: none; background: none; width: 100%; text-align: left; transition: all 0.2s; }
+    .nav-item:hover { background: rgba(196,113,58,0.12); color: var(--cream); }
+    .nav-item.active { background: rgba(196,113,58,0.2); color: var(--amber); }
+    .nav-item .nav-icon { width: 18px; text-align: center; font-size: 16px; }
+    .sidebar-footer { padding: 16px; border-top: 1px solid rgba(255,255,255,0.06); }
 
-        /* Clean, elevated card design */
-        .container {
-            width: 100%;
-            max-width: 420px;
-            background: var(--card);
-            padding: 48px 40px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            box-shadow: 0 16px 40px rgba(196, 113, 58, 0.08);
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 1;
-            animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-        }
+    /* --- MAIN AREA --- */
+    .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+    .topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 32px; height: 68px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
+    .greeting-text { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--dark); }
+    .greeting-text em { color: var(--clay); font-style: italic; }
+    .greeting-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
+    .btn-post { padding: 10px 20px; background: var(--clay); color: var(--white); border: none; border-radius: 10px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.25s; display: flex; align-items: center; gap: 6px; }
+    .btn-post:hover { background: var(--bark); transform: translateY(-1px); }
 
-        @keyframes popIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px) scale(0.95);
-            }
+    /* --- CONTENT & FEED --- */
+    .content { padding: 32px; flex: 1; }
+    .main-grid { display: grid; grid-template-columns: 1fr 340px; gap: 24px; }
+    .create-post-bar { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; gap: 12px; margin-bottom: 20px; cursor: pointer; transition: all 0.25s; }
+    .create-post-bar:hover { border-color: var(--clay); box-shadow: 0 4px 16px rgba(196,113,58,0.08); }
+    .create-avatar { width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, var(--clay), var(--amber)); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .create-placeholder { flex: 1; font-size: 14px; color: var(--muted); }
+    .section-header { margin-bottom: 18px; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--dark); }
+    .feed { display: flex; flex-direction: column; gap: 18px; }
+    
+    /* --- DYNAMIC RECIPE CARD --- */
+    .recipe-card { background: var(--card); border-radius: 18px; border: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; transition: transform 0.2s; }
+    .recipe-card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(196,113,58,0.1); }
+    .recipe-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--dark); margin-bottom: 8px; }
+    .recipe-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+    .recipe-meta { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--clay); font-weight: 500; }
+    .recipe-tag { background: rgba(196,113,58,0.1); padding: 4px 10px; border-radius: 6px; }
 
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
+    /* --- RIGHT SIDEBAR --- */
+    .right-sidebar { display: flex; flex-direction: column; gap: 20px; }
+    .widget { background: var(--card); border-radius: 18px; padding: 22px; border: 1px solid var(--border); }
+    .widget-title { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--dark); margin-bottom: 16px; }
+    .user-list { display: flex; flex-direction: column; gap: 12px; }
+    .user-item { display: flex; align-items: center; gap: 12px; }
+    .u-avatar { width: 38px; height: 38px; border-radius: 10px; background: #E8A44A; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .u-info { flex: 1; }
+    .u-name { font-size: 13px; font-weight: 500; color: var(--dark); }
 
-        .brand-header {
-            margin-bottom: 32px;
-        }
-
-        .logo-icon {
-            width: 56px;
-            height: 56px;
-            background: var(--clay);
-            border-radius: 14px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            box-shadow: 0 8px 24px rgba(196, 113, 58, 0.3);
-            margin-bottom: 16px;
-        }
-
-        .container h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 26px;
-            color: var(--dark);
-            margin-bottom: 8px;
-        }
-
-        .container p.subtitle {
-            font-size: 14px;
-            color: var(--muted);
-            margin-bottom: 24px;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Modernized Inputs matching the modal */
-        input {
-            width: 100%;
-            padding: 14px 18px;
-            margin-bottom: 16px;
-            border: 1.5px solid rgba(26, 17, 10, 0.12);
-            border-radius: 12px;
-            font-size: 14px;
-            font-family: 'DM Sans', sans-serif;
-            color: var(--dark);
-            background: var(--card);
-            transition: border-color 0.25s, box-shadow 0.25s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--clay);
-            box-shadow: 0 0 0 4px rgba(196, 113, 58, 0.1);
-        }
-
-        input::placeholder {
-            color: var(--muted);
-        }
-
-        /* Polished Buttons */
-        button {
-            width: 100%;
-            padding: 14px;
-            background: var(--clay);
-            color: var(--white);
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.25s;
-            margin-top: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        button:hover {
-            background: var(--bark);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(196, 113, 58, 0.25);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .logout-btn {
-            background: transparent;
-            border: 1.5px solid var(--border);
-            color: var(--clay);
-            margin-top: 32px;
-        }
-
-        .logout-btn:hover {
-            background: rgba(196, 113, 58, 0.05);
-            border-color: var(--clay);
-            box-shadow: none;
-        }
-
-        /* Subtle Toggle Links */
-        .toggle-link {
-            color: var(--muted);
-            cursor: pointer;
-            text-decoration: none;
-            margin-top: 24px;
-            display: inline-block;
-            font-size: 13px;
-            transition: color 0.2s;
-            font-weight: 500;
-        }
-
-        .toggle-link:hover {
-            color: var(--clay);
-        }
-
-        .toggle-link strong {
-            color: var(--dark);
-        }
-
-        /* Dashboard Specifics */
-        #dashboard-section {
-            max-width: 500px;
-            padding: 56px 48px;
-        }
-
-        #dash-greeting {
-            font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            color: var(--dark);
-        }
-
-        #dash-greeting em {
-            color: var(--clay);
-            font-style: italic;
-        }
-
-        #dash-bio {
-            color: var(--muted);
-            line-height: 1.6;
-            font-size: 15px;
-            margin-top: 16px;
-            padding: 16px;
-            background: rgba(196, 113, 58, 0.04);
-            border-radius: 12px;
-            border: 1px dashed var(--border);
-        }
-    </style>
+    /* --- MODAL --- */
+    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center; }
+    .modal-backdrop.open { display: flex; }
+    .modal { background: var(--white); border-radius: 20px; padding: 36px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; margin-bottom: 24px; }
+    .modal-title { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--dark); }
+    .modal-close { width: 36px; height: 36px; border-radius: 10px; border: 1.5px solid var(--border); background: transparent; cursor: pointer; font-size: 18px; color: var(--muted); }
+    .modal-field { margin-bottom: 18px; }
+    .modal-field label { display: block; font-size: 12px; font-weight: 500; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+    .modal-field input, .modal-field textarea, .modal-field select { width: 100%; padding: 13px 16px; border: 1.5px solid rgba(26,17,10,0.12); border-radius: 12px; font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; }
+    .modal-field input:focus, .modal-field textarea:focus { border-color: var(--clay); }
+  </style>
 </head>
-
 <body>
 
-    <div id="register-section" class="container">
-        <div class="brand-header">
-            <div class="logo-icon">🍳</div>
-            <h2>Join Mise <em>en Place</em></h2>
-            <p class="subtitle">Your community kitchen awaits.</p>
+  <div id="auth-wrapper">
+    <div id="register-section" class="auth-container">
+      <h2>Sign Up</h2>
+      <input type="email" id="reg-email" class="auth-input" placeholder="Email Address">
+      <input type="password" id="reg-password" class="auth-input" placeholder="Password">
+      <button class="auth-btn" onclick="registerUser()">Create Account</button>
+      <a class="auth-link" onclick="toggleAuth('login')">Already have an account? Log in</a>
+    </div>
+
+    <div id="login-section" class="auth-container hidden">
+      <h2>Log In</h2>
+      <input type="email" id="login-email" class="auth-input" placeholder="Email Address">
+      <input type="password" id="login-password" class="auth-input" placeholder="Password">
+      <button class="auth-btn" onclick="loginUser()">Access Kitchen</button>
+      <a class="auth-link" onclick="toggleAuth('register')">Need an account? Sign up</a>
+    </div>
+  </div>
+
+  <div id="dashboard-wrapper" class="hidden">
+    
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="logo-icon">🍳</div>
+        <div class="brand-text">
+          <div class="brand-name">Mise <em>en Place</em></div>
+          <div class="brand-tagline">Community Kitchen</div>
         </div>
-        <input type="email" id="reg-email" placeholder="Email Address">
-        <input type="password" id="reg-password" placeholder="Password">
-        <button onclick="registerUser()">Create Account</button>
-        <span class="toggle-link" onclick="showSection('login-section')">Already have an account? <strong>Log
-                in</strong></span>
-    </div>
-
-    <div id="login-section" class="container hidden">
-        <div class="brand-header">
-            <div class="logo-icon">🍳</div>
-            <h2>Welcome Back</h2>
-            <p class="subtitle">Sign in to access your recipes.</p>
+      </div>
+      <div class="sidebar-user">
+        <div class="user-avatar">🧑‍🍳</div>
+        <div class="user-info">
+          <div class="user-name" id="sidebar-name">Loading...</div>
+          <div class="user-role">Chef <span onclick="openEditProfile()" style="cursor:pointer; color:var(--cream); text-decoration:underline; font-size:10px; margin-left:6px;">Edit</span></div>
         </div>
-        <input type="email" id="login-email" placeholder="Email Address">
-        <input type="password" id="login-password" placeholder="Password">
-        <button onclick="loginUser()">Log In</button>
-        <span class="toggle-link" onclick="showSection('register-section')">Need an account? <strong>Sign
-                up</strong></span>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <button class="nav-item active"><span class="nav-icon">🏠</span> Feed</button>
+        <button class="nav-item"><span class="nav-icon">👤</span> Profile</button>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="nav-item" onclick="logoutUser()" style="color:rgba(255,100,100,0.6);">
+          <span class="nav-icon">🚪</span> Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="greeting-text">Welcome back, <em id="topbar-name">Chef</em></div>
+        <button class="btn-post" onclick="openModal()">+ Share Recipe</button>
+      </header>
+
+      <div class="content">
+        <div class="main-grid">
+          
+          <div class="feed-column">
+            <div class="create-post-bar" onclick="openModal()">
+              <div class="create-avatar">🧑‍🍳</div>
+              <div class="create-placeholder">Share a new recipe with the community...</div>
+            </div>
+            <div class="section-header">
+              <h2 class="section-title">Community Feed</h2>
+            </div>
+            
+            <div class="feed" id="recipe-feed">
+              <p style="color: var(--muted);">Loading recipes...</p>
+            </div>
+          </div>
+
+          <div class="right-sidebar">
+            <div class="widget">
+              <div class="widget-title">👥 Suggested Cooks</div>
+              <div class="user-list">
+                <div class="user-item">
+                  <div class="u-avatar">👨‍🍳</div>
+                  <div class="u-info"><div class="u-name">Chef Benjo</div></div>
+                </div>
+                <div class="user-item">
+                  <div class="u-avatar" style="background:var(--sage);">👩‍🍳</div>
+                  <div class="u-info"><div class="u-name">Ate Nena</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div id="dashboard-section" class="container hidden">
-        <div class="logo-icon" style="width: 48px; height: 48px; font-size: 24px;">🧑‍🍳</div>
-        <h2 id="dash-greeting">Loading...</h2>
-        <p id="dash-bio"></p>
-        <button class="logout-btn" onclick="logoutUser()">🚪 Log Out</button>
+  <div class="modal-backdrop" id="recipeModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Share a Recipe 🍳</div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-field">
+        <label>Recipe Title</label>
+        <input type="text" id="post-title" placeholder="e.g. Lola's Sinigang" />
+      </div>
+      <div class="modal-field">
+        <label>Description & Instructions</label>
+        <textarea id="post-desc" rows="4" placeholder="Tell the story and steps behind this dish..."></textarea>
+      </div>
+      <div class="modal-field">
+        <label>Category</label>
+        <select id="post-category">
+          <option value="Filipino Classics">Filipino Classics</option>
+          <option value="Healthy">Healthy</option>
+          <option value="Desserts">Desserts</option>
+        </select>
+      </div>
+      <button class="btn-post" style="width:100%; justify-content:center; padding:14px; font-size:15px;" onclick="submitPost()">
+        🚀 Publish Recipe
+      </button>
     </div>
+  </div>
 
-    <div id="admin-dashboard-section" class="container hidden" style="border-top: 5px solid #dc3545;">
-        <h2 id="admin-greeting">Admin Control Panel</h2>
-        <p>Welcome to the backend management interface.</p>
-        <button class="logout-btn" onclick="logoutUser()">Log Out</button>
+  <div class="modal-backdrop" id="editProfileModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Edit Profile 👤</div>
+        <button class="modal-close" onclick="closeEditProfile()">✕</button>
+      </div>
+      <div class="modal-field">
+        <label>Display Name</label>
+        <input type="text" id="edit-name" placeholder="e.g. Chef Gordon" />
+      </div>
+      <div class="modal-field">
+        <label>Bio</label>
+        <textarea id="edit-bio" rows="3" placeholder="Tell us about your cooking style..."></textarea>
+      </div>
+      <button class="btn-post" style="width:100%; justify-content:center; padding:14px; font-size:15px;" onclick="submitProfileUpdate()">
+        💾 Save Changes
+      </button>
     </div>
+  </div>
 
-    <script>
-        const API_BASE = 'http://localhost:8080/api';
+  <script>
+    const API_BASE = 'http://localhost:8080/api';
 
-        // --- UI Logic ---
-        function showSection(sectionId) {
-            document.getElementById('register-section').classList.add('hidden');
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('dashboard-section').classList.add('hidden');
-            document.getElementById(sectionId).classList.remove('hidden');
+    // --- Boot Sequence ---
+    window.onload = () => {
+      if (localStorage.getItem('jwt')) {
+        showDashboard();
+      } else {
+        toggleAuth('login');
+      }
+    };
+
+    // --- UI Routing ---
+    function toggleAuth(type) {
+      document.getElementById('dashboard-wrapper').classList.add('hidden');
+      document.getElementById('auth-wrapper').classList.remove('hidden');
+      if (type === 'login') {
+        document.getElementById('register-section').classList.add('hidden');
+        document.getElementById('login-section').classList.remove('hidden');
+      } else {
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('register-section').classList.remove('hidden');
+      }
+    }
+
+    function showDashboard() {
+      document.getElementById('auth-wrapper').classList.add('hidden');
+      document.getElementById('dashboard-wrapper').classList.remove('hidden');
+      loadProfileData();
+      loadFeed();
+    }
+
+    // --- Modal Controls ---
+    function openModal() { document.getElementById('recipeModal').classList.add('open'); }
+    function closeModal() { 
+      document.getElementById('recipeModal').classList.remove('open'); 
+      document.getElementById('post-title').value = '';
+      document.getElementById('post-desc').value = '';
+    }
+
+    function openEditProfile() {
+      document.getElementById('edit-name').value = document.getElementById('sidebar-name').innerText;
+      document.getElementById('editProfileModal').classList.add('open');
+    }
+
+    function closeEditProfile() {
+      document.getElementById('editProfileModal').classList.remove('open');
+    }
+
+    // --- API Calls: Auth ---
+    async function registerUser() {
+      const email = document.getElementById('reg-email').value;
+      const password = document.getElementById('reg-password').value;
+      try {
+        const res = await fetch(`${API_BASE}/auth/register.php`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password })
+        });
+        if (res.ok) { alert('Registration success! Please log in.'); toggleAuth('login'); } 
+        else { const data = await res.json(); alert('Error: ' + data.error); }
+      } catch (e) { alert('Server connection failed.'); }
+    }
+
+    async function loginUser() {
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      try {
+        const res = await fetch(`${API_BASE}/auth/login.php`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          localStorage.setItem('jwt', data.token);
+          showDashboard();
+        } else { alert('Error: ' + data.error); }
+      } catch (e) { alert('Server connection failed.'); }
+    }
+
+    function logoutUser() {
+      localStorage.removeItem('jwt');
+      toggleAuth('login');
+    }
+
+    // --- API Calls: Dashboard & Feed ---
+    async function loadProfileData() {
+      const token = localStorage.getItem('jwt');
+      try {
+        const res = await fetch(`${API_BASE}/profile/dashboard.php`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          document.getElementById('sidebar-name').innerText = data.data.display_name;
+          document.getElementById('topbar-name').innerText = data.data.display_name;
+        } else { logoutUser(); }
+      } catch (e) { console.error("Profile load failed"); }
+    }
+
+    async function loadFeed() {
+      const token = localStorage.getItem('jwt');
+      const feedContainer = document.getElementById('recipe-feed');
+      feedContainer.innerHTML = '<p style="color: var(--muted);">Loading recipes...</p>';
+
+      try {
+        const res = await fetch(`${API_BASE}/posts/get_posts.php`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+
+        if (res.ok && data.data.length > 0) {
+          feedContainer.innerHTML = ''; 
+          data.data.forEach(post => {
+            const card = document.createElement('div');
+            card.className = 'recipe-card';
+            card.innerHTML = `
+              <div class="recipe-meta">
+                <span class="recipe-tag">${post.category}</span>
+                <span style="margin-left:auto; color:var(--muted)">❤️ ${post.likes_count}</span>
+              </div>
+              <div class="recipe-title">${post.title}</div>
+              <div class="recipe-desc">${post.description}</div>
+              <div style="margin-top: 12px; font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px;">
+                <div style="width: 24px; height: 24px; border-radius: 6px; background: var(--amber); display: flex; align-items: center; justify-content: center; font-size: 10px; color: white;">👨‍🍳</div>
+                by <strong>${post.author_name}</strong>
+              </div>
+            `;
+            feedContainer.appendChild(card);
+          });
+        } else {
+          feedContainer.innerHTML = '<p style="color: var(--muted);">No recipes yet. Be the first to share!</p>';
         }
+      } catch (e) { feedContainer.innerHTML = '<p style="color: red;">Failed to load feed.</p>'; }
+    }
 
-        // Check if user is already logged in on page load
-        window.onload = () => {
-            if (localStorage.getItem('jwt')) {
-                loadDashboard();
-            } else {
-                showSection('login-section');
-            }
-        };
+    async function submitPost() {
+      const token = localStorage.getItem('jwt');
+      const title = document.getElementById('post-title').value;
+      const desc = document.getElementById('post-desc').value;
+      const category = document.getElementById('post-category').value;
+      const authorName = document.getElementById('sidebar-name').innerText;
 
-        // --- API Calls ---
-        async function registerUser() {
-            const email = document.getElementById('reg-email').value;
-            const password = document.getElementById('reg-password').value;
+      if (!title || !desc) { alert("Title and description are required."); return; }
 
-            try {
-                const response = await fetch(`${API_BASE}/auth/register.php`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
+      try {
+        const res = await fetch(`${API_BASE}/posts/create_post.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ title: title, description: desc, category: category, author_name: authorName })
+        });
 
-                const data = await response.json();
-
-                if (response.ok) {
-                    alert('Registration successful! You can now log in.');
-                    showSection('login-section');
-                } else {
-                    alert('Error: ' + data.error);
-                }
-            } catch (error) {
-                alert('Failed to connect to the server.');
-            }
+        if (res.ok) {
+          closeModal();
+          loadFeed(); 
+        } else {
+          const data = await res.json();
+          alert('Error: ' + data.error);
         }
+      } catch (e) { alert('Failed to publish recipe.'); }
+    }
 
-        async function loginUser() {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
+    async function submitProfileUpdate() {
+      const token = localStorage.getItem('jwt');
+      const newName = document.getElementById('edit-name').value;
+      const newBio = document.getElementById('edit-bio').value;
 
-            try {
-                const response = await fetch(`${API_BASE}/auth/login.php`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                
-                const data = await response.json();
+      if (!newName) { alert("Display name cannot be empty."); return; }
 
-                if (response.ok) {
-                    localStorage.setItem('jwt', data.token);
-                    localStorage.setItem('role', data.role); // Save the role
-                    document.getElementById('login-email').value = '';
-                    document.getElementById('login-password').value = '';
-                    loadDashboard();
-                } else {
-                    alert('Error: ' + data.error);
-                }
-            } catch (error) {
-                alert('Failed to connect to the server.');
-            }
+      try {
+        const res = await fetch(`${API_BASE}/profile/update_profile.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ display_name: newName, bio: newBio })
+        });
+        
+        if (res.ok) {
+          document.getElementById('sidebar-name').innerText = newName;
+          document.getElementById('topbar-name').innerText = newName;
+          closeEditProfile();
+        } else {
+          const data = await res.json();
+          alert('Error: ' + data.error);
         }
-
-        async function loadDashboard() {
-            const token = localStorage.getItem('jwt');
-            const role = localStorage.getItem('role'); // Get the role
-
-            if (!token) {
-                showSection('login-section');
-                return;
-            }
-
-            // Route based on role
-            if (role === 'admin') {
-                showSection('admin-dashboard-section');
-                return; // Stop here, admins don't load the normal chef dashboard yet
-            }
-            // Show dashboard early so user sees it loading
-            showSection('dashboard-section');
-
-            try {
-                const response = await fetch(`${API_BASE}/profile/dashboard.php`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    document.getElementById('dash-greeting').innerHTML = `Welcome, <em>${data.data.display_name}</em>`;
-                    document.getElementById('dash-bio').innerText = data.data.bio || "No bio available.";
-                } else {
-                    // Token is invalid or expired
-                    alert('Session expired. Please log in again.');
-                    logoutUser();
-                }
-            } catch (error) {
-                document.getElementById('dash-greeting').innerText = 'Failed to load data.';
-            }
-        }
-
-        function logoutUser() {
-            localStorage.removeItem('jwt');
-            localStorage.removeItem('role');
-            showSection('login-section');
-        }
-
-    </script>
+      } catch (e) { alert('Failed to update profile.'); }
+    }
+  </script>
 </body>
-
 </html>

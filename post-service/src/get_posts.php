@@ -20,7 +20,8 @@ if (!$token || !verify_jwt($token)) {
 }
 
 // Fetch the 20 most recent posts
-$stmt = $pdo->query("SELECT id, user_id, title, description, category, points_cost, likes_count, created_at FROM posts ORDER BY created_at DESC LIMIT 20");
+// Added author_name to the SELECT statement
+$stmt = $pdo->query("SELECT id, user_id, author_name, title, description, category, points_cost, likes_count, created_at FROM posts ORDER BY created_at DESC LIMIT 20");
 $posts = $stmt->fetchAll();
 
 http_response_code(200);
