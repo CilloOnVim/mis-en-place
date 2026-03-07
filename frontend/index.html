@@ -8,40 +8,74 @@
   <style>
     /* --- CORE VARIABLES & RESET --- */
     :root {
-      --clay:   #C4713A;
-      --amber:  #E8A44A;
-      --cream:  #FAF3E8;
-      --dark:   #1A110A;
-      --bark:   #3D2314;
-      --sage:   #7C8C6E;
-      --leaf:   #4A5C3A;
-      --white:  #FFFDF8;
-      --bg:     #F5EDE0;
-      --card:   #FFFDF8;
-      --border: rgba(196,113,58,0.15);
-      --text:   #1A110A;
-      --muted:  rgba(26,17,10,0.5);
+      --clay:    #C4713A;
+      --amber:   #E8A44A;
+      --cream:   #FAF3E8;
+      --dark:    #1A110A;
+      --bark:    #3D2314;
+      --sage:    #7C8C6E;
+      --leaf:    #4A5C3A;
+      --white:   #FFFDF8;
+      --bg:      #F5EDE0;
+      --card:    #FFFDF8;
+      --border:  rgba(196,113,58,0.15);
+      --text:    #1A110A;
+      --muted:   rgba(26,17,10,0.5);
+      --error:   #C0392B;
       --sidebar-w: 260px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; overflow-x: hidden; }
     .hidden { display: none !important; }
 
-    /* --- AUTH SCREENS (LOGIN / REGISTER) --- */
-    #auth-wrapper { width: 100%; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-    .auth-container { width: 100%; max-width: 400px; background: var(--white); padding: 40px; border-radius: 16px; box-shadow: 0 12px 32px rgba(196,113,58,0.12); border: 1px solid var(--border); text-align: center; }
-    .auth-container h2 { font-family: 'Playfair Display', serif; color: var(--dark); margin-bottom: 20px; font-size: 24px; }
-    .auth-input { width: 100%; padding: 12px 16px; margin: 10px 0; border: 1.5px solid rgba(26,17,10,0.12); border-radius: 10px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s; }
-    .auth-input:focus { border-color: var(--clay); }
-    .auth-btn { width: 100%; padding: 12px; background-color: var(--clay); color: var(--white); border: none; border-radius: 10px; cursor: pointer; font-weight: 500; font-family: 'DM Sans', sans-serif; margin-top: 10px; transition: background 0.2s; }
-    .auth-btn:hover { background-color: var(--bark); }
-    .auth-link { color: var(--clay); cursor: pointer; text-decoration: none; margin-top: 20px; display: block; font-size: 13px; font-weight: 500; }
-    .auth-link:hover { text-decoration: underline; }
+    /* --- AUTH SPLIT-SCREEN LAYOUT --- */
+    #auth-wrapper { width: 100vw; min-height: 100vh; background: var(--dark); display: flex; overflow: hidden; }
+    
+    .left-panel { flex: 1.1; position: relative; display: flex; flex-direction: column; justify-content: center; padding: 60px 64px; overflow: hidden; }
+    .bg-art { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 30% 50%, rgba(196,113,58,0.18) 0%, transparent 70%), radial-gradient(ellipse 60% 80% at 80% 20%, rgba(122,78,40,0.12) 0%, transparent 60%), linear-gradient(160deg, #1A110A 0%, #2C1A0E 50%, #1A110A 100%); z-index: 0; }
+    .bg-pattern { position: absolute; inset: 0; opacity: 0.05; background-image: repeating-linear-gradient(45deg, var(--clay) 0, var(--clay) 1px, transparent 0, transparent 50%), repeating-linear-gradient(-45deg, var(--amber) 0, var(--amber) 1px, transparent 0, transparent 50%); background-size: 28px 28px; z-index: 0; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(80px); animation: drift 12s ease-in-out infinite alternate; z-index: 0; }
+    .orb-1 { width: 380px; height: 380px; background: rgba(196,113,58,0.22); top: -80px; left: -100px; animation-delay: 0s; }
+    .orb-2 { width: 300px; height: 300px; background: rgba(232,164,74,0.15); bottom: -60px; right: -60px; animation-delay: -4s; }
+    .orb-3 { width: 200px; height: 200px; background: rgba(74,92,58,0.2); top: 40%; left: 60%; animation-delay: -8s; }
+    @keyframes drift { from { transform: translate(0, 0) scale(1); } to { transform: translate(30px, 20px) scale(1.08); } }
+    .left-content { position: relative; z-index: 1; }
+    .brand-mark { display: flex; align-items: center; gap: 14px; margin-bottom: 64px; animation: fadeUp 0.8s ease both; }
+    .auth-logo-icon { width: 48px; height: 48px; background: var(--clay); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 8px 24px rgba(196,113,58,0.4); position: relative; overflow: hidden; }
+    .auth-logo-icon::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 60%); }
+    .auth-brand-name { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--cream); letter-spacing: 0.5px; }
+    .auth-brand-name span { color: var(--amber); font-style: italic; }
+    .hero-text { animation: fadeUp 0.8s ease 0.15s both; }
+    .tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: var(--amber); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px; }
+    .hero-heading { font-family: 'Playfair Display', serif; font-size: clamp(36px, 3.5vw, 54px); line-height: 1.15; color: var(--white); margin-bottom: 24px; }
+    .hero-heading .accent { color: var(--amber); font-style: italic; display: block; }
+    .hero-desc { font-size: 15px; color: rgba(250,243,232,0.55); line-height: 1.8; max-width: 400px; margin-bottom: 48px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; animation: fadeUp 0.8s ease 0.3s both; }
+    .chip { padding: 8px 16px; border: 1px solid rgba(196,113,58,0.3); border-radius: 999px; font-size: 12px; color: rgba(250,243,232,0.7); letter-spacing: 0.5px; background: rgba(196,113,58,0.08); backdrop-filter: blur(8px); transition: all 0.3s; }
+    .panel-divider { width: 1px; background: linear-gradient(to bottom, transparent, rgba(196,113,58,0.3), transparent); margin: 40px 0; flex-shrink: 0; }
 
-    /* --- DASHBOARD WRAPPER --- */
-    #dashboard-wrapper { width: 100%; display: flex; }
+    .right-panel { flex: 0.9; background: var(--white); display: flex; align-items: center; justify-content: center; padding: 60px 56px; position: relative; overflow: hidden; }
+    .right-panel::before { content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(196,113,58,0.06) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+    .form-container { width: 100%; max-width: 400px; animation: fadeUp 0.8s ease 0.2s both; position: relative; z-index: 10;}
+    .form-header { margin-bottom: 40px; }
+    .form-eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--clay); font-weight: 500; margin-bottom: 10px; }
+    .form-title { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--dark); line-height: 1.2; margin-bottom: 8px; }
+    .form-subtitle { font-size: 14px; color: rgba(26,17,10,0.5); }
+    .form-subtitle a { color: var(--clay); text-decoration: none; font-weight: 500; cursor: pointer; transition: color 0.2s; }
+    .form-subtitle a:hover { color: var(--bark); }
+    
+    .field-group { display: flex; flex-direction: column; gap: 18px; margin-bottom: 28px; }
+    .field { position: relative; }
+    .field label { display: block; font-size: 12px; font-weight: 500; color: rgba(26,17,10,0.6); letter-spacing: 0.5px; margin-bottom: 8px; text-transform: uppercase; }
+    .field input { width: 100%; padding: 14px 18px 14px 48px; border: 1.5px solid rgba(26,17,10,0.12); border-radius: 12px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--dark); background: var(--white); outline: none; transition: all 0.25s ease; }
+    .field input:focus { border-color: var(--clay); box-shadow: 0 0 0 4px rgba(196,113,58,0.1); }
+    .field-icon { position: absolute; bottom: 14px; left: 16px; color: rgba(26,17,10,0.35); font-size: 17px; pointer-events: none; }
+    
+    .btn-primary { width: 100%; padding: 16px; background: var(--clay); color: var(--white); border: none; border-radius: 12px; font-size: 15px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: all 0.3s ease; margin-bottom: 20px; }
+    .btn-primary:hover { background: var(--bark); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(196,113,58,0.35); }
 
-    /* --- SIDEBAR --- */
+    /* --- DASHBOARD STYLES --- */
+    /* (Kept exactly as they were so the dashboard looks right) */
     .sidebar { width: var(--sidebar-w); background: var(--dark); min-height: 100vh; display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; overflow: hidden; }
     .sidebar-brand { padding: 28px 24px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); }
     .logo-icon { width: 40px; height: 40px; background: var(--clay); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
@@ -61,17 +95,12 @@
     .nav-item.active { background: rgba(196,113,58,0.2); color: var(--amber); }
     .nav-item .nav-icon { width: 18px; text-align: center; font-size: 16px; }
     .sidebar-footer { padding: 16px; border-top: 1px solid rgba(255,255,255,0.06); }
-
-    /* --- MAIN AREA --- */
     .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
     .topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 32px; height: 68px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
     .greeting-text { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--dark); }
     .greeting-text em { color: var(--clay); font-style: italic; }
-    .greeting-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
     .btn-post { padding: 10px 20px; background: var(--clay); color: var(--white); border: none; border-radius: 10px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.25s; display: flex; align-items: center; gap: 6px; }
     .btn-post:hover { background: var(--bark); transform: translateY(-1px); }
-
-    /* --- CONTENT & FEED --- */
     .content { padding: 32px; flex: 1; }
     .main-grid { display: grid; grid-template-columns: 1fr 340px; gap: 24px; }
     .create-post-bar { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; gap: 12px; margin-bottom: 20px; cursor: pointer; transition: all 0.25s; }
@@ -81,16 +110,12 @@
     .section-header { margin-bottom: 18px; }
     .section-title { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--dark); }
     .feed { display: flex; flex-direction: column; gap: 18px; }
-    
-    /* --- DYNAMIC RECIPE CARD --- */
     .recipe-card { background: var(--card); border-radius: 18px; border: 1px solid var(--border); display: flex; flex-direction: column; padding: 20px; transition: transform 0.2s; }
     .recipe-card:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(196,113,58,0.1); }
     .recipe-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--dark); margin-bottom: 8px; }
     .recipe-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
     .recipe-meta { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--clay); font-weight: 500; }
     .recipe-tag { background: rgba(196,113,58,0.1); padding: 4px 10px; border-radius: 6px; }
-
-    /* --- RIGHT SIDEBAR --- */
     .right-sidebar { display: flex; flex-direction: column; gap: 20px; }
     .widget { background: var(--card); border-radius: 18px; padding: 22px; border: 1px solid var(--border); }
     .widget-title { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--dark); margin-bottom: 16px; }
@@ -100,7 +125,7 @@
     .u-info { flex: 1; }
     .u-name { font-size: 13px; font-weight: 500; color: var(--dark); }
 
-    /* --- MODAL --- */
+    /* --- MODALS --- */
     .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center; }
     .modal-backdrop.open { display: flex; }
     .modal { background: var(--white); border-radius: 20px; padding: 36px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; }
@@ -111,30 +136,86 @@
     .modal-field label { display: block; font-size: 12px; font-weight: 500; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
     .modal-field input, .modal-field textarea, .modal-field select { width: 100%; padding: 13px 16px; border: 1.5px solid rgba(26,17,10,0.12); border-radius: 12px; font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; }
     .modal-field input:focus, .modal-field textarea:focus { border-color: var(--clay); }
+    
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
 
   <div id="auth-wrapper">
-    <div id="register-section" class="auth-container">
-      <h2>Sign Up</h2>
-      <input type="email" id="reg-email" class="auth-input" placeholder="Email Address">
-      <input type="password" id="reg-password" class="auth-input" placeholder="Password">
-      <button class="auth-btn" onclick="registerUser()">Create Account</button>
-      <a class="auth-link" onclick="toggleAuth('login')">Already have an account? Log in</a>
+    <div class="left-panel">
+      <div class="bg-art"></div>
+      <div class="bg-pattern"></div>
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+
+      <div class="left-content">
+        <div class="brand-mark">
+          <div class="auth-logo-icon">🍳</div>
+          <div class="auth-brand-name">Mise <span>en Place</span></div>
+        </div>
+        <div class="hero-text">
+          <div class="tagline">Para sa mga Lutuin ng Puso</div>
+          <h1 class="hero-heading">Where every<br>recipe tells<span class="accent">a story.</span></h1>
+          <p class="hero-desc">A community-driven platform for home cooks, chefs, and culinary creators across the Philippines and beyond. Share, discover, and cook with soul.</p>
+        </div>
+        <div class="chips">
+          <span class="chip">🍜 Smart Recipe Scaling</span>
+          <span class="chip">🏅 Points & Rewards</span>
+          <span class="chip">🤝 Cook Community</span>
+        </div>
+      </div>
     </div>
 
-    <div id="login-section" class="auth-container hidden">
-      <h2>Log In</h2>
-      <input type="email" id="login-email" class="auth-input" placeholder="Email Address">
-      <input type="password" id="login-password" class="auth-input" placeholder="Password">
-      <button class="auth-btn" onclick="loginUser()">Access Kitchen</button>
-      <a class="auth-link" onclick="toggleAuth('register')">Need an account? Sign up</a>
+    <div class="panel-divider"></div>
+
+    <div class="right-panel">
+      <div id="register-section" class="form-container hidden">
+        <div class="form-header">
+          <div class="form-eyebrow">Join the kitchen</div>
+          <h2 class="form-title">Create an account</h2>
+          <p class="form-subtitle">Already have an account? <a onclick="toggleAuth('login')">Log in →</a></p>
+        </div>
+        <div class="field-group">
+          <div class="field">
+            <label>Email Address</label>
+            <input type="email" id="reg-email" placeholder="yourname@email.com">
+            <span class="field-icon">✉</span>
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" id="reg-password" placeholder="••••••••">
+            <span class="field-icon">🔒</span>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="registerUser()">Create Account</button>
+      </div>
+
+      <div id="login-section" class="form-container">
+        <div class="form-header">
+          <div class="form-eyebrow">Welcome back</div>
+          <h2 class="form-title">Sign in to your kitchen</h2>
+          <p class="form-subtitle">New here? <a onclick="toggleAuth('register')">Create an account →</a></p>
+        </div>
+        <div class="field-group">
+          <div class="field">
+            <label>Email Address</label>
+            <input type="email" id="login-email" placeholder="yourname@email.com">
+            <span class="field-icon">✉</span>
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" id="login-password" placeholder="••••••••">
+            <span class="field-icon">🔒</span>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="loginUser()">Sign In</button>
+      </div>
     </div>
   </div>
 
   <div id="dashboard-wrapper" class="hidden">
-    
     <aside class="sidebar">
       <div class="sidebar-brand">
         <div class="logo-icon">🍳</div>
@@ -170,7 +251,6 @@
 
       <div class="content">
         <div class="main-grid">
-          
           <div class="feed-column">
             <div class="create-post-bar" onclick="openModal()">
               <div class="create-avatar">🧑‍🍳</div>
@@ -179,7 +259,6 @@
             <div class="section-header">
               <h2 class="section-title">Community Feed</h2>
             </div>
-            
             <div class="feed" id="recipe-feed">
               <p style="color: var(--muted);">Loading recipes...</p>
             </div>
@@ -200,7 +279,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
