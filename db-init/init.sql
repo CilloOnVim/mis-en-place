@@ -50,7 +50,7 @@ USE post_db;
 CREATE TABLE IF NOT EXISTS posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    author_name VARCHAR(255) DEFAULT 'Unknown Chef', -- This is the missing link
+    author_name VARCHAR(255) DEFAULT 'Unknown Chef',
     title VARCHAR(255) NOT NULL,
     description TEXT,
     category VARCHAR(100),
@@ -58,4 +58,14 @@ CREATE TABLE IF NOT EXISTS posts (
     recipe_data JSON,
     likes_count INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- NEW: The Paywall Ledger
+CREATE TABLE IF NOT EXISTS unlocked_recipes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+    points_paid INT NOT NULL,
+    unlocked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_unlock (user_id, post_id) -- Prevents duplicate purchases
 );
