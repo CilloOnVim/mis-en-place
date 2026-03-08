@@ -34,10 +34,10 @@ if (!empty($data->email) && !empty($data->password)) {
         http_response_code(200);
         // Send the role back in the JSON response so the frontend knows immediately
         echo json_encode([
-            'message' => 'Login successful', 
-            'token' => $token, 
-            'role' => $user['role']
-        ]);
+    'message' => 'Login successful',
+    'token' => $token,
+    'role' => $user['role'] // THIS IS CRITICAL
+]);
     } else {
         http_response_code(401);
         echo json_encode(['error' => 'Invalid credentials']);
