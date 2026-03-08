@@ -18,10 +18,22 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE DATABASE IF NOT EXISTS profile_db;
 USE profile_db;
 
+-- Upgraded profiles table with a digital wallet
 CREATE TABLE IF NOT EXISTS profiles (
-    user_id INT PRIMARY KEY, -- This will match the ID from auth_db.users
-    display_name VARCHAR(255) NOT NULL,
+    user_id INT PRIMARY KEY,
+    display_name VARCHAR(100) DEFAULT 'New Chef',
     bio TEXT,
+    points_balance INT DEFAULT 0, -- The digital wallet
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- New ledger for Admin Monitoring
+CREATE TABLE IF NOT EXISTS transactions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    buyer_name VARCHAR(100) DEFAULT 'Unknown',
+    php_amount DECIMAL(10,2) NOT NULL,
+    points_added INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

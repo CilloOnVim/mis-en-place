@@ -31,7 +31,7 @@ if (!$payload) {
 $user_id = $payload['user_id'];
 
 // Query the profile database
-$stmt = $pdo->prepare("SELECT display_name, bio FROM profiles WHERE user_id = ?");
+$stmt = $pdo->prepare("SELECT display_name, bio, points_balance FROM profiles WHERE user_id = ?");
 $stmt->execute([$user_id]);
 $profile = $stmt->fetch();
 
@@ -39,7 +39,12 @@ if ($profile) {
     http_response_code(200);
     echo json_encode([
         'message' => 'Dashboard loaded successfully',
-        'data' => $profile
+        'data' => [
+            // Grab the actual data from the database fetch
+            'display_name' => $profile['display_name'],
+            'bio' => $profile['bio'],
+            'points_balance' => (int)$profile['points_balance']
+        ]
     ]);
 } else {
     // Profile row doesn't exist yet, return a graceful default
@@ -48,8 +53,8 @@ if ($profile) {
         'message' => 'Dashboard loaded successfully',
         'data' => [
             'display_name' => 'New Chef',
-            'bio' => 'Update your profile to tell us about your culinary journey.'
+            'bio' => 'Update your profile to tell us about your culinary journey.',
+            'points_balance' => 0
         ]
     ]);
 }
-?>

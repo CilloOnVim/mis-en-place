@@ -14,7 +14,6 @@
       --dark:    #1A110A;
       --bark:    #3D2314;
       --sage:    #7C8C6E;
-      --leaf:    #4A5C3A;
       --white:   #FFFDF8;
       --bg:      #F5EDE0;
       --card:    #FFFDF8;
@@ -54,7 +53,7 @@
     .field input { width: 100%; padding: 14px 18px; border: 1.5px solid rgba(26,17,10,0.12); border-radius: 12px; font-size: 14px; outline: none; }
     .btn-primary { width: 100%; padding: 16px; background: var(--clay); color: var(--white); border: none; border-radius: 12px; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
 
-    /* --- COMMON LAYOUT (Shared between Dashboards) --- */
+    /* --- COMMON LAYOUT --- */
     .sidebar { width: var(--sidebar-w); background: var(--dark); min-height: 100vh; display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; overflow: hidden; }
     .sidebar-brand { padding: 28px 24px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); }
     .logo-icon { width: 40px; height: 40px; background: var(--clay); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
@@ -64,9 +63,7 @@
     .user-avatar { width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, var(--clay), var(--amber)); display: flex; align-items: center; justify-content: center; font-size: 18px; }
     .user-info { flex: 1; min-width: 0; }
     .user-name { font-size: 14px; font-weight: 500; color: var(--cream); }
-    .user-role { font-size: 11px; color: var(--amber); letter-spacing: 0.5px; }
     .sidebar-nav { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 2px; }
-    .nav-section-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(250,243,232,0.25); padding: 12px 10px 6px; font-weight: 500; }
     .nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px; color: rgba(250,243,232,0.55); font-size: 14px; cursor: pointer; border: none; background: none; width: 100%; text-align: left; }
     .nav-item:hover, .nav-item.active { background: rgba(196,113,58,0.2); color: var(--amber); }
     .sidebar-footer { padding: 16px; border-top: 1px solid rgba(255,255,255,0.06); }
@@ -75,11 +72,17 @@
     .greeting-text { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--dark); }
     .content { padding: 32px; flex: 1; }
 
+    /* --- WIDGETS & BUTTONS --- */
+    .widget { background: var(--card); border-radius: 18px; padding: 22px; border: 1px solid var(--border); }
+    .btn-sm { padding: 10px 16px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--bg); font-size: 13px; font-family: 'DM Sans'; font-weight: 500; cursor: pointer; transition: all 0.2s; color: var(--dark); }
+    .btn-sm:hover { border-color: var(--clay); color: var(--clay); background: var(--white); box-shadow: 0 2px 8px rgba(196,113,58,0.1); }
+    .btn-post { padding: 10px 20px; background: var(--clay); color: var(--white); border: none; border-radius: 10px; font-size: 13px; cursor: pointer; transition: background 0.2s;}
+    .btn-post:hover { background: var(--bark); }
+
     /* --- CHEF DASHBOARD SPECIFICS --- */
-    .btn-post { padding: 10px 20px; background: var(--clay); color: var(--white); border: none; border-radius: 10px; font-size: 13px; cursor: pointer; }
-    .main-grid { display: grid; grid-template-columns: 1fr 340px; gap: 24px; }
+    /* Changed grid to 1 column since wallet is moved, clamped width so it doesn't look stretched */
+    .main-grid { display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 800px; }
     .create-post-bar { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; gap: 12px; margin-bottom: 20px; cursor: pointer; }
-    .create-avatar { width: 38px; height: 38px; border-radius: 10px; background: var(--amber); display: flex; align-items: center; justify-content: center; font-size: 18px; }
     .recipe-card { background: var(--card); border-radius: 18px; border: 1px solid var(--border); padding: 20px; margin-bottom: 18px; }
     .recipe-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--dark); margin-bottom: 8px; }
     .recipe-desc { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
@@ -88,17 +91,14 @@
     /* --- ADMIN DASHBOARD SPECIFICS --- */
     #admin-wrapper .sidebar { background: var(--admin-accent); }
     #admin-wrapper .logo-icon { background: rgba(255,255,255,0.15); }
-    #admin-wrapper .admin-badge { font-size: 10px; background: rgba(255,255,255,0.15); color: white; padding: 2px 8px; border-radius: 4px; margin-top: 4px; display: inline-block; }
     #admin-wrapper .nav-item:hover, #admin-wrapper .nav-item.active { background: rgba(255,255,255,0.18); color: white; }
-    #admin-wrapper .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+    #admin-wrapper .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
     #admin-wrapper .stat-card { background: var(--card); border-radius: 16px; padding: 22px; border: 1px solid var(--border); }
-    #admin-wrapper .stat-value { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--dark); }
-    
+    #admin-wrapper .stat-value { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--dark); margin-bottom: 4px;}
     #admin-wrapper .table-wrap { background: var(--card); border-radius: 18px; border: 1px solid var(--border); overflow: hidden; margin-top: 20px;}
     #admin-wrapper table { width: 100%; border-collapse: collapse; }
     #admin-wrapper th { padding: 13px 20px; text-align: left; font-size: 11px; color: rgba(26,17,10,0.4); border-bottom: 1px solid var(--border); text-transform: uppercase; }
     #admin-wrapper td { padding: 14px 20px; font-size: 13px; color: var(--dark); border-bottom: 1px solid rgba(196,113,58,0.06); }
-    
     .badge { display: inline-flex; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 500; }
     .badge-admin { background: rgba(139,26,26,0.12); color: var(--admin-accent); }
     .badge-user { background: rgba(196,113,58,0.1); color: var(--clay); }
@@ -133,7 +133,6 @@
     </div>
     <div class="panel-divider"></div>
     <div class="right-panel">
-      
       <div id="register-section" class="form-container hidden">
         <div class="form-header">
           <div class="form-eyebrow">Join the kitchen</div>
@@ -166,17 +165,28 @@
     <aside class="sidebar">
       <div class="sidebar-brand">
         <div class="logo-icon">🍳</div>
-        <div class="brand-text">
-          <div class="brand-name">Mise <em>en Place</em></div>
-        </div>
+        <div class="brand-name">Mise <em>en Place</em></div>
       </div>
       <div class="sidebar-user">
         <div class="user-avatar">🧑‍🍳</div>
         <div class="user-info">
           <div class="user-name" id="sidebar-name">Loading...</div>
-          <div class="user-role">Chef <span onclick="openEditProfile()" style="cursor:pointer; color:var(--cream); text-decoration:underline; font-size:10px;">Edit</span></div>
+          <div style="font-size:11px; color:var(--amber);">Chef <span onclick="openEditProfile()" style="cursor:pointer; color:var(--cream); text-decoration:underline;">Edit</span></div>
         </div>
       </div>
+      
+      <div style="margin: 16px 20px; padding: 16px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
+        <div style="font-size: 11px; color: rgba(250,243,232,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">🏅 Digital Wallet</div>
+        <div style="font-size: 24px; color: var(--amber); font-family: 'Playfair Display', serif; margin-bottom: 16px;" id="wallet-balance">0 <span style="font-size:12px; color:rgba(250,243,232,0.4);">pts</span></div>
+        
+        <button class="btn-sm" style="width: 100%; margin-bottom: 8px; display:flex; justify-content:space-between; background:rgba(255,255,255,0.08); border:none; color:var(--cream);" onclick="buyPoints(500, 500)">
+          <span>500 pts</span> <strong>₱500</strong>
+        </button>
+        <button class="btn-sm" style="width: 100%; display:flex; justify-content:space-between; background:var(--clay); border:none; color:white;" onclick="buyPoints(1200, 1000)">
+          <span>1,200 pts</span> <strong>₱1k</strong>
+        </button>
+      </div>
+
       <nav class="sidebar-nav">
         <button class="nav-item active">🏠 Feed</button>
       </nav>
@@ -205,22 +215,16 @@
     <aside class="sidebar">
       <div class="sidebar-brand">
         <div class="logo-icon">⚙️</div>
-        <div>
-          <div class="brand-name">Mise <em>en Place</em></div>
-          <div class="admin-badge">Admin Panel</div>
-        </div>
+        <div class="brand-name">Mise <em>en Place</em></div>
       </div>
       <div class="sidebar-user">
         <div class="user-avatar">🛡️</div>
         <div>
           <div class="user-name" style="color:white; font-size:14px;">Administrator</div>
-          <div style="font-size:10px; color:rgba(255,255,255,0.7);">Full Access</div>
         </div>
       </div>
       <nav class="sidebar-nav">
         <button class="nav-item active">📊 Dashboard</button>
-        <button class="nav-item">👥 Users</button>
-        <button class="nav-item">🚩 Flagged Content</button>
       </nav>
       <div class="sidebar-footer">
         <button class="nav-item" onclick="logoutUser()">🚪 Sign Out</button>
@@ -237,23 +241,35 @@
             <div class="stat-value" id="admin-total-users">0</div>
             <div style="font-size:12px; color:var(--muted)">Total Registered Users</div>
           </div>
+          <div class="stat-card">
+            <div class="stat-value" id="admin-total-revenue" style="color:#16a34a;">₱ 0</div>
+            <div style="font-size:12px; color:var(--muted)">Total Revenue</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="admin-total-points" style="color:var(--amber);">0</div>
+            <div style="font-size:12px; color:var(--muted)">Points Sold</div>
+          </div>
         </div>
         
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 20px;">System Monitoring</h2>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Joined Date</th>
-              </tr>
-            </thead>
-            <tbody id="admin-user-table">
-              <tr><td colspan="4" style="text-align:center;">Loading users...</td></tr>
-            </tbody>
-          </table>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <div>
+            <h2 style="font-family: 'Playfair Display', serif; font-size: 20px;">System Users</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Email</th><th>Role</th><th>Joined</th></tr></thead>
+                <tbody id="admin-user-table"><tr><td colspan="3">Loading users...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <h2 style="font-family: 'Playfair Display', serif; font-size: 20px;">Recent Transactions</h2>
+            <div class="widget" style="margin-top: 20px; padding: 0 22px;">
+              <div id="admin-transactions-list">
+                <p style="color: var(--muted); font-size: 12px; padding: 20px 0;">Loading ledger...</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -267,6 +283,12 @@
       </div>
       <div class="modal-field"><label>Recipe Title</label><input type="text" id="post-title"></div>
       <div class="modal-field"><label>Description</label><textarea id="post-desc" rows="4"></textarea></div>
+      <div class="modal-field"><label>Category</label>
+        <select id="post-category">
+          <option value="Filipino Classics">Filipino Classics</option>
+          <option value="Healthy">Healthy</option>
+        </select>
+      </div>
       <button class="btn-post" style="width:100%; padding:14px;" onclick="submitPost()">🚀 Publish</button>
     </div>
   </div>
@@ -285,14 +307,9 @@
   <script>
     const API_BASE = 'http://localhost:8080/api';
 
-    // --- Boot Sequence & Routing ---
     window.onload = () => {
       const token = localStorage.getItem('jwt');
-      if (token) {
-        routeUser();
-      } else {
-        toggleAuth('login');
-      }
+      if (token) routeUser(); else toggleAuth('login');
     };
 
     function toggleAuth(type) {
@@ -316,6 +333,7 @@
         document.getElementById('dashboard-wrapper').classList.add('hidden');
         document.getElementById('admin-wrapper').classList.remove('hidden');
         loadAdminData();
+        loadAdminTransactions(); 
       } else {
         document.getElementById('admin-wrapper').classList.add('hidden');
         document.getElementById('dashboard-wrapper').classList.remove('hidden');
@@ -330,7 +348,6 @@
       toggleAuth('login');
     }
 
-    // --- Auth API Calls ---
     async function registerUser() {
       const email = document.getElementById('reg-email').value;
       const password = document.getElementById('reg-password').value;
@@ -353,48 +370,66 @@
         const data = await res.json();
         if (res.ok) {
           localStorage.setItem('jwt', data.token);
-          // Fallback to 'user' if backend doesn't return role yet
           localStorage.setItem('mep_role', data.role || 'user'); 
           routeUser();
         } else { alert('Error: ' + data.error); }
       } catch (e) { alert('Server failed.'); }
     }
 
-    // --- Admin API Calls ---
     async function loadAdminData() {
       const token = localStorage.getItem('jwt');
       const tableBody = document.getElementById('admin-user-table');
-      
       try {
-        const res = await fetch(`${API_BASE}/auth/admin_get_users.php`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await fetch(`${API_BASE}/auth/admin_get_users.php`, { headers: { 'Authorization': `Bearer ${token}` } });
         const data = await res.json();
-        
         if (res.ok) {
           document.getElementById('admin-total-users').innerText = data.data.length;
           tableBody.innerHTML = '';
-          
           data.data.forEach(user => {
             const badgeClass = user.role === 'admin' ? 'badge-admin' : 'badge-user';
             tableBody.innerHTML += `
               <tr>
-                <td style="font-weight:500;">#${user.id}</td>
                 <td>${user.email}</td>
                 <td><span class="badge ${badgeClass}">${user.role.toUpperCase()}</span></td>
                 <td>${new Date(user.created_at).toLocaleDateString()}</td>
               </tr>
             `;
           });
-        } else {
-          tableBody.innerHTML = `<tr><td colspan="4" style="color:red;">Error loading users: ${data.error}</td></tr>`;
         }
-      } catch(e) {
-        tableBody.innerHTML = `<tr><td colspan="4" style="color:red;">Connection failed.</td></tr>`;
-      }
+      } catch(e) {}
     }
 
-    // --- User Dashboard APIs (Kept intact) ---
+    async function loadAdminTransactions() {
+      const token = localStorage.getItem('jwt');
+      const list = document.getElementById('admin-transactions-list');
+      try {
+        const res = await fetch(`${API_BASE}/profile/admin_get_transactions.php`, { headers: { 'Authorization': `Bearer ${token}` } });
+        const data = await res.json();
+        if (res.ok) {
+          document.getElementById('admin-total-revenue').innerText = '₱ ' + Number(data.totals.revenue || 0).toLocaleString();
+          document.getElementById('admin-total-points').innerText = Number(data.totals.points || 0).toLocaleString();
+          
+          list.innerHTML = '';
+          if(data.data.length === 0) list.innerHTML = '<p style="color:var(--muted); font-size:12px; padding: 20px 0;">No transactions yet.</p>';
+
+          data.data.forEach(tx => {
+            list.innerHTML += `
+              <div style="display:flex; justify-content:space-between; padding: 14px 0; border-bottom: 1px solid var(--border);">
+                <div>
+                  <div style="font-size:13px; font-weight:500; color:var(--dark);">${tx.buyer_name}</div>
+                  <div style="font-size:11px; color:var(--muted); margin-top:2px;">${new Date(tx.created_at).toLocaleString()}</div>
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-size:13px; color:var(--amber); font-weight:bold;">+${tx.points_added} pts</div>
+                  <div style="font-size:11px; color:#16a34a; font-weight:500;">₱ ${tx.php_amount}</div>
+                </div>
+              </div>
+            `;
+          });
+        }
+      } catch(e) {}
+    }
+
     async function loadProfileData() {
       const token = localStorage.getItem('jwt');
       try {
@@ -403,6 +438,8 @@
           const data = await res.json();
           document.getElementById('sidebar-name').innerText = data.data.display_name;
           document.getElementById('topbar-name').innerText = data.data.display_name;
+          // Updated specifically for the dark sidebar UI
+          document.getElementById('wallet-balance').innerHTML = `${data.data.points_balance || 0} <span style="font-size:12px; color:rgba(250,243,232,0.4);">pts</span>`;
         }
       } catch (e) {}
     }
@@ -428,11 +465,55 @@
       } catch (e) {}
     }
 
-    // Modal Controls
+    async function buyPoints(points, price) {
+      const token = localStorage.getItem('jwt');
+      const buyerName = document.getElementById('sidebar-name').innerText;
+      
+      if(!confirm(`Are you sure you want to purchase ${points} points for ₱${price}?`)) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/profile/buy_points.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ points: points, php_amount: price, buyer_name: buyerName })
+        });
+        
+        if(res.ok) {
+          alert(`Successfully purchased ${points} points!`);
+          loadProfileData(); 
+        } else {
+          alert('Transaction failed.');
+        }
+      } catch(e) { alert('Network connection failed.'); }
+    }
+
     function openModal() { document.getElementById('recipeModal').classList.add('open'); }
     function closeModal() { document.getElementById('recipeModal').classList.remove('open'); }
-    function openEditProfile() { document.getElementById('editProfileModal').classList.add('open'); }
+    function openEditProfile() { document.getElementById('editProfileModal').classList.add('open'); document.getElementById('edit-name').value = document.getElementById('sidebar-name').innerText; }
     function closeEditProfile() { document.getElementById('editProfileModal').classList.remove('open'); }
+
+    async function submitPost() {
+      const token = localStorage.getItem('jwt');
+      const title = document.getElementById('post-title').value;
+      const desc = document.getElementById('post-desc').value;
+      const category = document.getElementById('post-category').value;
+      const authorName = document.getElementById('sidebar-name').innerText;
+      if (!title || !desc) { alert("Fields required."); return; }
+      try {
+        const res = await fetch(`${API_BASE}/posts/create_post.php`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ title, description: desc, category, author_name: authorName }) });
+        if (res.ok) { closeModal(); loadFeed(); } 
+      } catch (e) {}
+    }
+
+    async function submitProfileUpdate() {
+      const token = localStorage.getItem('jwt');
+      const newName = document.getElementById('edit-name').value;
+      if (!newName) return;
+      try {
+        const res = await fetch(`${API_BASE}/profile/update_profile.php`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ display_name: newName }) });
+        if (res.ok) { closeEditProfile(); loadProfileData(); }
+      } catch (e) {}
+    }
   </script>
 </body>
 </html>
