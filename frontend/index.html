@@ -80,7 +80,6 @@
     .btn-post:hover { background: var(--bark); }
 
     /* --- CHEF DASHBOARD SPECIFICS --- */
-    /* Changed grid to 1 column since wallet is moved, clamped width so it doesn't look stretched */
     .main-grid { display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 800px; }
     .create-post-bar { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; gap: 12px; margin-bottom: 20px; cursor: pointer; }
     .recipe-card { background: var(--card); border-radius: 18px; border: 1px solid var(--border); padding: 20px; margin-bottom: 18px; }
@@ -106,7 +105,7 @@
     /* --- MODALS --- */
     .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center; }
     .modal-backdrop.open { display: flex; }
-    .modal { background: var(--white); border-radius: 20px; padding: 36px; width: 100%; max-width: 560px; }
+    .modal { background: var(--white); border-radius: 20px; padding: 36px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; }
     .modal-header { display: flex; justify-content: space-between; margin-bottom: 24px; }
     .modal-title { font-family: 'Playfair Display', serif; font-size: 22px; }
     .modal-close { background: transparent; border: none; cursor: pointer; font-size: 18px; }
@@ -281,18 +280,46 @@
         <div class="modal-title">Share a Recipe 🍳</div>
         <button class="modal-close" onclick="closeModal()">✕</button>
       </div>
-      <div class="modal-field"><label>Recipe Title</label><input type="text" id="post-title"></div>
-      <div class="modal-field"><label>Description</label><textarea id="post-desc" rows="4"></textarea></div>
-      <div class="modal-field"><label>Category</label>
-        <select id="post-category">
-          <option value="Filipino Classics">Filipino Classics</option>
-          <option value="Healthy">Healthy</option>
-        </select>
+      
+      <div class="modal-field">
+        <label>Recipe Title</label>
+        <input type="text" id="post-title" placeholder="e.g. Lola's Sinigang">
       </div>
-      <button class="btn-post" style="width:100%; padding:14px;" onclick="submitPost()">🚀 Publish</button>
+      
+      <div class="modal-field">
+        <label>Description & Steps</label>
+        <textarea id="post-desc" rows="3" placeholder="Tell the story and steps behind this dish..."></textarea>
+      </div>
+
+      <div style="display: flex; gap: 16px; margin-bottom: 18px;">
+        <div class="modal-field" style="flex: 1; margin-bottom: 0;">
+          <label>Category</label>
+          <select id="post-category">
+            <option value="Filipino Classics">Filipino Classics</option>
+            <option value="Healthy">Healthy</option>
+            <option value="Desserts">Desserts</option>
+          </select>
+        </div>
+        <div class="modal-field" style="flex: 1; margin-bottom: 0;">
+          <label>Base Servings</label>
+          <input type="number" id="post-servings" placeholder="e.g. 4" min="1" value="1">
+        </div>
+        <div class="modal-field" style="flex: 1; margin-bottom: 0;">
+          <label>Price (Points)</label>
+          <input type="number" id="post-price" placeholder="0 = Free" min="0" value="0">
+        </div>
+      </div>
+
+      <div class="modal-field">
+        <label>Ingredients</label>
+        <div id="ingredients-container"></div>
+        <button type="button" class="btn-sm" style="margin-top:10px; border-style:dashed; width:100%;" onclick="addIngredientRow()">+ Add Ingredient</button>
+      </div>
+
+      <button class="btn-post" style="width:100%; padding:14px; margin-top: 10px;" onclick="submitPost()">🚀 Publish Recipe</button>
     </div>
   </div>
-  
+
   <div class="modal-backdrop" id="editProfileModal">
     <div class="modal">
       <div class="modal-header">
@@ -438,7 +465,6 @@
           const data = await res.json();
           document.getElementById('sidebar-name').innerText = data.data.display_name;
           document.getElementById('topbar-name').innerText = data.data.display_name;
-          // Updated specifically for the dark sidebar UI
           document.getElementById('wallet-balance').innerHTML = `${data.data.points_balance || 0} <span style="font-size:12px; color:rgba(250,243,232,0.4);">pts</span>`;
         }
       } catch (e) {}
@@ -447,22 +473,116 @@
     async function loadFeed() {
       const token = localStorage.getItem('jwt');
       const feedContainer = document.getElementById('recipe-feed');
+      feedContainer.innerHTML = '<p style="color: var(--muted);">Loading recipes...</p>';
+
       try {
         const res = await fetch(`${API_BASE}/posts/get_posts.php`, { headers: { 'Authorization': `Bearer ${token}` }});
         const data = await res.json();
+        
         if (res.ok && data.data.length > 0) {
           feedContainer.innerHTML = ''; 
           data.data.forEach(post => {
+            
+            let ingredientsHTML = '';
+            
+            // NEW: The Paywall UI Check
+            if (post.locked) {
+              ingredientsHTML = `
+                <div style="margin: 12px 0; padding: 24px 16px; background: rgba(26,17,10,0.04); border-radius: 12px; border: 1px dashed rgba(26,17,10,0.2); text-align: center;">
+                  <div style="font-size: 24px; margin-bottom: 8px;">🔒</div>
+                  <div style="font-size: 14px; font-weight: 500; color: var(--dark); margin-bottom: 4px;">Premium Recipe</div>
+                  <div style="font-size: 12px; color: var(--muted); margin-bottom: 16px;">Unlock the ingredients and scaling engine to cook this dish.</div>
+                  <button class="btn-sm" style="background: var(--amber); border: none; color: var(--dark); font-weight: 700; width: 100%;" onclick="unlockRecipe(${post.id}, ${post.points_cost})">
+                    Unlock for ${post.points_cost} pts
+                  </button>
+                </div>
+              `;
+            } else {
+              try {
+                const parsedData = typeof post.recipe_data === 'string' ? JSON.parse(post.recipe_data) : (post.recipe_data || {});
+                const ingredientsList = Array.isArray(parsedData) ? parsedData : (parsedData.ingredients || []);
+                const baseServings = parsedData.base_servings || 1;
+                
+                if (ingredientsList.length > 0) {
+                  ingredientsHTML = '<div style="margin: 12px 0; padding: 16px; background: rgba(196,113,58,0.04); border-radius: 12px; border: 1px dashed rgba(196,113,58,0.3);">';
+                  
+                  ingredientsHTML += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+                                        <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--clay); letter-spacing: 0.5px;">🛒 Ingredients</span>
+                                        <span style="font-size: 11px; color: var(--muted);">Yields: ${baseServings} Servings</span>
+                                      </div>`;
+                  
+                  ingredientsHTML += '<ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: var(--dark); display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">';
+                  ingredientsList.forEach(ing => {
+                    ingredientsHTML += `<li>• <strong style="color:var(--bark);">${ing.amount} ${ing.unit}</strong> ${ing.ingredient}</li>`;
+                  });
+                  ingredientsHTML += '</ul></div>';
+                }
+              } catch(e) { console.error("Error parsing ingredients for post ID: " + post.id); }
+            }
+
             feedContainer.innerHTML += `
               <div class="recipe-card">
-                <span class="recipe-tag">${post.category}</span>
-                <div class="recipe-title" style="margin-top:10px;">${post.title}</div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span class="recipe-tag">${post.category}</span>
+                  <span style="color:var(--muted); font-size:12px;">❤️ ${post.likes_count || 0}</span>
+                </div>
+                <div class="recipe-title" style="margin-top:12px;">${post.title}</div>
                 <div class="recipe-desc">${post.description}</div>
-                <div style="font-size:11px; color:var(--muted);">by <strong>${post.author_name}</strong></div>
+                
+                ${ingredientsHTML}
+                
+                <div style="margin-top: 14px; font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 8px;">
+                  <div style="width: 24px; height: 24px; border-radius: 6px; background: var(--amber); display: flex; align-items: center; justify-content: center; font-size: 10px; color: white;">👨‍🍳</div>
+                  by <strong style="color:var(--dark);">${post.author_name}</strong>
+                </div>
               </div>`;
           });
+        } else {
+          feedContainer.innerHTML = '<p style="color: var(--muted);">No recipes yet. Be the first to share!</p>';
         }
-      } catch (e) {}
+      } catch (e) { 
+        feedContainer.innerHTML = '<p style="color: var(--error);">Failed to load feed.</p>'; 
+      }
+    }
+
+    // NEW: The Checkout Orchestrator
+    async function unlockRecipe(postId, cost) {
+      const token = localStorage.getItem('jwt');
+      
+      if(!confirm(`Are you sure you want to spend ${cost} points to unlock this recipe?`)) return;
+
+      try {
+        // Step 1: Hit the Profile Service to deduct the points
+        const spendRes = await fetch(`${API_BASE}/profile/spend_points.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ points: cost })
+        });
+        
+        if (!spendRes.ok) {
+          const spendData = await spendRes.json();
+          alert('Transaction Failed: ' + spendData.error);
+          return;
+        }
+
+        // Step 2: Hit the Post Service to drop the paywall
+        const unlockRes = await fetch(`${API_BASE}/posts/unlock_recipe.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ post_id: postId, points_paid: cost })
+        });
+
+        if (unlockRes.ok) {
+          alert('Success! Recipe unlocked.');
+          loadProfileData(); // Instantly update the wallet UI
+          loadFeed(); // Instantly refresh the feed to reveal the hidden ingredients
+        } else {
+          alert('Error: Points deducted, but failed to unlock ledger.');
+        }
+
+      } catch(e) { 
+        alert('Network connection failed during checkout.'); 
+      }
     }
 
     async function buyPoints(points, price) {
@@ -487,8 +607,43 @@
       } catch(e) { alert('Network connection failed.'); }
     }
 
-    function openModal() { document.getElementById('recipeModal').classList.add('open'); }
-    function closeModal() { document.getElementById('recipeModal').classList.remove('open'); }
+    function addIngredientRow() {
+      const container = document.getElementById('ingredients-container');
+      const row = document.createElement('div');
+      row.style.display = 'flex';
+      row.style.gap = '8px';
+      row.style.marginBottom = '8px';
+      
+      row.innerHTML = `
+        <input type="text" class="ing-name" placeholder="e.g. Garlic" style="flex:2;">
+        <input type="number" class="ing-amt" placeholder="Qty" style="flex:1;">
+        <select class="ing-unit" style="flex:1;">
+          <option value="pcs">pcs</option>
+          <option value="tbsp">tbsp</option>
+          <option value="tsp">tsp</option>
+          <option value="cup">cup</option>
+          <option value="g">grams</option>
+          <option value="ml">ml</option>
+        </select>
+        <button type="button" style="padding:0 12px; border-radius:8px; border:1px solid var(--error); background:transparent; color:var(--error); cursor:pointer;" onclick="this.parentElement.remove()">✕</button>
+      `;
+      container.appendChild(row);
+    }
+
+    function openModal() { 
+      document.getElementById('recipeModal').classList.add('open'); 
+      document.getElementById('ingredients-container').innerHTML = '';
+      addIngredientRow(); 
+    }
+    
+    function closeModal() { 
+      document.getElementById('recipeModal').classList.remove('open'); 
+      document.getElementById('post-title').value = '';
+      document.getElementById('post-desc').value = '';
+      document.getElementById('post-price').value = '0';
+      document.getElementById('post-servings').value = '1';
+    }
+
     function openEditProfile() { document.getElementById('editProfileModal').classList.add('open'); document.getElementById('edit-name').value = document.getElementById('sidebar-name').innerText; }
     function closeEditProfile() { document.getElementById('editProfileModal').classList.remove('open'); }
 
@@ -498,11 +653,51 @@
       const desc = document.getElementById('post-desc').value;
       const category = document.getElementById('post-category').value;
       const authorName = document.getElementById('sidebar-name').innerText;
-      if (!title || !desc) { alert("Fields required."); return; }
+      
+      const price = parseInt(document.getElementById('post-price').value) || 0;
+      const servings = parseInt(document.getElementById('post-servings').value) || 1;
+      
+      if (!title || !desc) { alert("Title and description are required."); return; }
+
+      const ingredientRows = document.querySelectorAll('#ingredients-container > div');
+      const recipeDataArray = [];
+      
+      ingredientRows.forEach(row => {
+        const name = row.querySelector('.ing-name').value.trim();
+        const amt = row.querySelector('.ing-amt').value;
+        const unit = row.querySelector('.ing-unit').value;
+        if (name) { 
+          recipeDataArray.push({ ingredient: name, amount: parseFloat(amt) || 0, unit: unit });
+        }
+      });
+
+      const advancedRecipeData = {
+        base_servings: servings,
+        ingredients: recipeDataArray
+      };
+
       try {
-        const res = await fetch(`${API_BASE}/posts/create_post.php`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ title, description: desc, category, author_name: authorName }) });
-        if (res.ok) { closeModal(); loadFeed(); } 
-      } catch (e) {}
+        const res = await fetch(`${API_BASE}/posts/create_post.php`, { 
+          method: 'POST', 
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, 
+          body: JSON.stringify({ 
+            title: title, 
+            description: desc, 
+            category: category, 
+            author_name: authorName,
+            points_cost: price,
+            recipe_data: advancedRecipeData
+          }) 
+        });
+        
+        if (res.ok) { 
+          closeModal(); 
+          loadFeed(); 
+        } else {
+          const data = await res.json();
+          alert('Error: ' + data.error);
+        }
+      } catch (e) { alert('Failed to publish recipe.'); }
     }
 
     async function submitProfileUpdate() {
