@@ -485,7 +485,6 @@
             
             let ingredientsHTML = '';
             
-            // NEW: The Paywall UI Check
             if (post.locked) {
               ingredientsHTML = `
                 <div style="margin: 12px 0; padding: 24px 16px; background: rgba(26,17,10,0.04); border-radius: 12px; border: 1px dashed rgba(26,17,10,0.2); text-align: center;">
@@ -506,15 +505,24 @@
                 if (ingredientsList.length > 0) {
                   ingredientsHTML = '<div style="margin: 12px 0; padding: 16px; background: rgba(196,113,58,0.04); border-radius: 12px; border: 1px dashed rgba(196,113,58,0.3);">';
                   
-                  ingredientsHTML += `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
-                                        <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--clay); letter-spacing: 0.5px;">🛒 Ingredients</span>
-                                        <span style="font-size: 11px; color: var(--muted);">Yields: ${baseServings} Servings</span>
-                                      </div>`;
+                  // Interactive Serving Counter UI
+                  ingredientsHTML += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+                      <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--clay); letter-spacing: 0.5px;">🛒 Ingredients</span>
+                      
+                      <div style="display:flex; align-items:center; gap:8px; background:var(--white); padding:2px 4px; border-radius:8px; border:1px solid var(--border);">
+                        <button onclick="scaleRecipe(this, -1)" style="border:none; background:transparent; cursor:pointer; font-size:14px; font-weight:bold; color:var(--dark); padding: 0 6px;">-</button>
+                        <span class="serving-display" data-base="${baseServings}" data-current="${baseServings}" style="font-size:11px; font-weight:500; min-width:65px; text-align:center;">${baseServings} Servings</span>
+                        <button onclick="scaleRecipe(this, 1)" style="border:none; background:transparent; cursor:pointer; font-size:14px; font-weight:bold; color:var(--dark); padding: 0 6px;">+</button>
+                      </div>
+                    </div>`;
                   
                   ingredientsHTML += '<ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: var(--dark); display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">';
+                  
                   ingredientsList.forEach(ing => {
-                    ingredientsHTML += `<li>• <strong style="color:var(--bark);">${ing.amount} ${ing.unit}</strong> ${ing.ingredient}</li>`;
+                    ingredientsHTML += `<li>• <strong style="color:var(--bark);"><span class="ing-val" data-base-amt="${ing.amount}">${ing.amount}</span> ${ing.unit}</strong> ${ing.ingredient}</li>`;
                   });
+                  
                   ingredientsHTML += '</ul></div>';
                 }
               } catch(e) { console.error("Error parsing ingredients for post ID: " + post.id); }
@@ -545,14 +553,11 @@
       }
     }
 
-    // NEW: The Checkout Orchestrator
     async function unlockRecipe(postId, cost) {
       const token = localStorage.getItem('jwt');
-      
       if(!confirm(`Are you sure you want to spend ${cost} points to unlock this recipe?`)) return;
 
       try {
-        // Step 1: Hit the Profile Service to deduct the points
         const spendRes = await fetch(`${API_BASE}/profile/spend_points.php`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
@@ -565,7 +570,6 @@
           return;
         }
 
-        // Step 2: Hit the Post Service to drop the paywall
         const unlockRes = await fetch(`${API_BASE}/posts/unlock_recipe.php`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
@@ -574,21 +578,17 @@
 
         if (unlockRes.ok) {
           alert('Success! Recipe unlocked.');
-          loadProfileData(); // Instantly update the wallet UI
-          loadFeed(); // Instantly refresh the feed to reveal the hidden ingredients
+          loadProfileData(); 
+          loadFeed(); 
         } else {
           alert('Error: Points deducted, but failed to unlock ledger.');
         }
-
-      } catch(e) { 
-        alert('Network connection failed during checkout.'); 
-      }
+      } catch(e) { alert('Network connection failed during checkout.'); }
     }
 
     async function buyPoints(points, price) {
       const token = localStorage.getItem('jwt');
       const buyerName = document.getElementById('sidebar-name').innerText;
-      
       if(!confirm(`Are you sure you want to purchase ${points} points for ₱${price}?`)) return;
 
       try {
@@ -597,13 +597,10 @@
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
           body: JSON.stringify({ points: points, php_amount: price, buyer_name: buyerName })
         });
-        
         if(res.ok) {
           alert(`Successfully purchased ${points} points!`);
           loadProfileData(); 
-        } else {
-          alert('Transaction failed.');
-        }
+        } else { alert('Transaction failed.'); }
       } catch(e) { alert('Network connection failed.'); }
     }
 
@@ -613,7 +610,6 @@
       row.style.display = 'flex';
       row.style.gap = '8px';
       row.style.marginBottom = '8px';
-      
       row.innerHTML = `
         <input type="text" class="ing-name" placeholder="e.g. Garlic" style="flex:2;">
         <input type="number" class="ing-amt" placeholder="Qty" style="flex:1;">
@@ -653,7 +649,6 @@
       const desc = document.getElementById('post-desc').value;
       const category = document.getElementById('post-category').value;
       const authorName = document.getElementById('sidebar-name').innerText;
-      
       const price = parseInt(document.getElementById('post-price').value) || 0;
       const servings = parseInt(document.getElementById('post-servings').value) || 1;
       
@@ -661,42 +656,24 @@
 
       const ingredientRows = document.querySelectorAll('#ingredients-container > div');
       const recipeDataArray = [];
-      
       ingredientRows.forEach(row => {
         const name = row.querySelector('.ing-name').value.trim();
         const amt = row.querySelector('.ing-amt').value;
         const unit = row.querySelector('.ing-unit').value;
-        if (name) { 
-          recipeDataArray.push({ ingredient: name, amount: parseFloat(amt) || 0, unit: unit });
-        }
+        if (name) { recipeDataArray.push({ ingredient: name, amount: parseFloat(amt) || 0, unit: unit }); }
       });
 
-      const advancedRecipeData = {
-        base_servings: servings,
-        ingredients: recipeDataArray
-      };
+      const advancedRecipeData = { base_servings: servings, ingredients: recipeDataArray };
 
       try {
         const res = await fetch(`${API_BASE}/posts/create_post.php`, { 
           method: 'POST', 
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, 
           body: JSON.stringify({ 
-            title: title, 
-            description: desc, 
-            category: category, 
-            author_name: authorName,
-            points_cost: price,
-            recipe_data: advancedRecipeData
+            title: title, description: desc, category: category, author_name: authorName, points_cost: price, recipe_data: advancedRecipeData
           }) 
         });
-        
-        if (res.ok) { 
-          closeModal(); 
-          loadFeed(); 
-        } else {
-          const data = await res.json();
-          alert('Error: ' + data.error);
-        }
+        if (res.ok) { closeModal(); loadFeed(); } else { const data = await res.json(); alert('Error: ' + data.error); }
       } catch (e) { alert('Failed to publish recipe.'); }
     }
 
@@ -708,6 +685,32 @@
         const res = await fetch(`${API_BASE}/profile/update_profile.php`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ display_name: newName }) });
         if (res.ok) { closeEditProfile(); loadProfileData(); }
       } catch (e) {}
+    }
+
+    // --- Dynamic Ingredient Scaler Engine ---
+    function scaleRecipe(btnElement, delta) {
+      const counterWrapper = btnElement.parentElement;
+      const displaySpan = counterWrapper.querySelector('.serving-display');
+      const recipeCard = counterWrapper.closest('.recipe-card');
+      const amountSpans = recipeCard.querySelectorAll('.ing-val');
+      
+      const baseServings = parseInt(displaySpan.getAttribute('data-base'));
+      let currentServings = parseInt(displaySpan.getAttribute('data-current'));
+      
+      let newServings = currentServings + delta;
+      if (newServings < 1) newServings = 1;
+      
+      displaySpan.setAttribute('data-current', newServings);
+      displaySpan.innerText = newServings + (newServings === 1 ? ' Serving' : ' Servings');
+      
+      const scalingRatio = newServings / baseServings;
+      
+      amountSpans.forEach(span => {
+        const baseAmt = parseFloat(span.getAttribute('data-base-amt'));
+        let newAmt = baseAmt * scalingRatio;
+        newAmt = Number((newAmt).toFixed(2));
+        span.innerText = newAmt;
+      });
     }
   </script>
 </body>
