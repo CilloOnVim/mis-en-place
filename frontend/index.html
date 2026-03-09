@@ -3,269 +3,2106 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mise en Place</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Cormorant+Garamond:ital,wght@1,300&display=swap" rel="stylesheet"/>
+  <title>Mise en Place — Community Kitchen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Lora:ital,wght@1,400;1,500&display=swap" rel="stylesheet"/>
   <style>
-    /* --- CORE VARIABLES & RESET --- */
+    /* ═══════════════════════════════════════════════════════
+       CORE VARIABLES & RESET
+    ═══════════════════════════════════════════════════════ */
     :root {
-      --clay:    #C4713A;
-      --amber:   #E8A44A;
-      --cream:   #FAF3E8;
-      --dark:    #1A110A;
-      --bark:    #3D2314;
-      --sage:    #7C8C6E;
-      --white:   #FFFDF8;
-      --bg:      #F5EDE0;
-      --card:    #FFFDF8;
-      --border:  rgba(196,113,58,0.15);
-      --text:    #1A110A;
-      --muted:   rgba(26,17,10,0.5);
-      --error:   #C0392B;
+      --clay:         #C4713A;
+      --clay-light:   #D4875A;
+      --clay-dark:    #A35A28;
+      --amber:        #E8A44A;
+      --amber-light:  #F2BC72;
+      --cream:        #FAF3E8;
+      --dark:         #1A110A;
+      --bark:         #3D2314;
+      --bark-mid:     #5C3520;
+      --sage:         #7C8C6E;
+      --leaf:         #4A5C3A;
+      --white:        #FFFDF8;
+      --bg:           #F2E8D8;
+      --bg-deep:      #EAD9C4;
+      --card:         #FFFDF8;
+      --border:       rgba(196,113,58,0.15);
+      --border-mid:   rgba(196,113,58,0.25);
+      --text:         #1A110A;
+      --muted:        rgba(26,17,10,0.5);
+      --muted-light:  rgba(26,17,10,0.35);
+      --error:        #C0392B;
+      --success:      #2D7A4F;
       --admin-accent: #8B1A1A;
-      --sidebar-w: 260px;
+      --admin-dark:   #5C0F0F;
+      --sidebar-w:    272px;
+      --topbar-h:     68px;
+      --radius-sm:    8px;
+      --radius-md:    14px;
+      --radius-lg:    20px;
+      --radius-xl:    28px;
+      --shadow-sm:    0 2px 8px rgba(26,17,10,0.06);
+      --shadow-md:    0 8px 24px rgba(26,17,10,0.09);
+      --shadow-lg:    0 20px 48px rgba(26,17,10,0.13);
+      --shadow-clay:  0 8px 24px rgba(196,113,58,0.25);
     }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; overflow-x: hidden; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
     .hidden { display: none !important; }
 
-    /* --- AUTH SPLIT-SCREEN LAYOUT --- */
-    #auth-wrapper { width: 100vw; min-height: 100vh; background: var(--dark); display: flex; overflow: hidden; }
-    .left-panel { flex: 1.1; position: relative; display: flex; flex-direction: column; justify-content: center; padding: 60px 64px; overflow: hidden; }
-    .bg-art { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 30% 50%, rgba(196,113,58,0.18) 0%, transparent 70%), radial-gradient(ellipse 60% 80% at 80% 20%, rgba(122,78,40,0.12) 0%, transparent 60%), linear-gradient(160deg, #1A110A 0%, #2C1A0E 50%, #1A110A 100%); z-index: 0; }
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(196,113,58,0.25); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--clay); }
+
+    /* ═══════════════════════════════════════════════════════
+       KEYFRAME ANIMATIONS
+    ═══════════════════════════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.94) translateY(10px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    @keyframes drift {
+      0%   { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, 20px) scale(1.06); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(196,113,58,0); }
+      50%       { box-shadow: 0 0 0 6px rgba(196,113,58,0.15); }
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       AUTH LAYOUT — SPLIT SCREEN
+    ═══════════════════════════════════════════════════════ */
+    #auth-wrapper {
+      width: 100vw;
+      min-height: 100vh;
+      background: var(--dark);
+      display: flex;
+      overflow: hidden;
+      animation: fadeIn 0.4s ease;
+    }
+
+    /* ── Left Panel ─────────────────────── */
+    .left-panel {
+      flex: 1.15;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 64px 72px;
+      overflow: hidden;
+    }
+
+    .bg-art {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 90% 70% at 25% 55%, rgba(196,113,58,0.2) 0%, transparent 65%),
+        radial-gradient(ellipse 70% 90% at 85% 15%, rgba(122,78,40,0.14) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 70% 80%, rgba(74,92,58,0.12) 0%, transparent 55%),
+        linear-gradient(158deg, #140C06 0%, #2A180C 45%, #1A110A 100%);
+      z-index: 0;
+    }
+
+    /* Woven texture overlay — Filipino heritage */
+    .bg-art::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.04;
+      background-image:
+        repeating-linear-gradient(0deg, var(--amber) 0, var(--amber) 1px, transparent 0, transparent 14px),
+        repeating-linear-gradient(90deg, var(--clay) 0, var(--clay) 1px, transparent 0, transparent 14px);
+      z-index: 0;
+    }
+
+    /* Floating light orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      animation: drift 14s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 { width: 420px; height: 420px; background: rgba(196,113,58,0.18); top: -120px; left: -80px; }
+    .orb-2 { width: 320px; height: 320px; background: rgba(232,164,74,0.12); bottom: -80px; right: -40px; animation-delay: -5s; }
+    .orb-3 { width: 220px; height: 220px; background: rgba(74,92,58,0.16); top: 45%; left: 55%; animation-delay: -9s; }
+
     .left-content { position: relative; z-index: 1; }
-    .brand-mark { display: flex; align-items: center; gap: 14px; margin-bottom: 64px; }
-    .auth-logo-icon { width: 48px; height: 48px; background: var(--clay); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 8px 24px rgba(196,113,58,0.4); }
-    .auth-brand-name { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--cream); }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 72px;
+      animation: slideInLeft 0.7s ease both;
+    }
+
+    .auth-logo-icon {
+      width: 50px; height: 50px;
+      background: var(--clay);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 8px 28px rgba(196,113,58,0.5);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .auth-logo-icon::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.22) 0%, transparent 55%);
+    }
+
+    .auth-brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--cream);
+      letter-spacing: 0.3px;
+    }
     .auth-brand-name span { color: var(--amber); font-style: italic; }
-    .hero-heading { font-family: 'Playfair Display', serif; font-size: clamp(36px, 3.5vw, 54px); line-height: 1.15; color: var(--white); margin-bottom: 24px; }
-    .hero-heading .accent { color: var(--amber); font-style: italic; display: block; }
-    .hero-desc { font-size: 15px; color: rgba(250,243,232,0.55); line-height: 1.8; max-width: 400px; margin-bottom: 48px; }
-    .panel-divider { width: 1px; background: linear-gradient(to bottom, transparent, rgba(196,113,58,0.3), transparent); margin: 40px 0; flex-shrink: 0; }
-    .right-panel { flex: 0.9; background: var(--white); display: flex; align-items: center; justify-content: center; padding: 60px 56px; position: relative; overflow: hidden; }
-    .form-container { width: 100%; max-width: 400px; position: relative; z-index: 10;}
-    .form-header { margin-bottom: 40px; }
-    .form-eyebrow { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--clay); font-weight: 500; margin-bottom: 10px; }
-    .form-title { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--dark); line-height: 1.2; margin-bottom: 8px; }
-    .form-subtitle { font-size: 14px; color: rgba(26,17,10,0.5); }
-    .form-subtitle a { color: var(--clay); text-decoration: none; font-weight: 500; cursor: pointer; transition: color 0.2s; }
-    .field-group { display: flex; flex-direction: column; gap: 18px; margin-bottom: 28px; }
-    .field label { display: block; font-size: 12px; font-weight: 500; color: rgba(26,17,10,0.6); margin-bottom: 8px; text-transform: uppercase; }
-    .field input { width: 100%; padding: 14px 18px; border: 1.5px solid rgba(26,17,10,0.12); border-radius: 12px; font-size: 14px; outline: none; }
-    .btn-primary { width: 100%; padding: 16px; background: var(--clay); color: var(--white); border: none; border-radius: 12px; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
 
-    /* --- COMMON LAYOUT --- */
-    .sidebar { width: var(--sidebar-w); background: var(--dark); min-height: 100vh; display: flex; flex-direction: column; position: fixed; left: 0; top: 0; bottom: 0; z-index: 100; overflow: hidden; }
-    .sidebar-brand { padding: 28px 24px 24px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .logo-icon { width: 40px; height: 40px; background: var(--clay); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-    .brand-name { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--cream); line-height: 1; }
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 20px;
+      animation: fadeUp 0.8s ease 0.1s both;
+      font-weight: 500;
+    }
+
+    .hero-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(38px, 3.8vw, 58px);
+      line-height: 1.12;
+      color: var(--white);
+      margin-bottom: 24px;
+      animation: fadeUp 0.8s ease 0.2s both;
+    }
+    .hero-heading .accent {
+      color: var(--amber);
+      font-style: italic;
+      display: block;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      color: rgba(250,243,232,0.52);
+      line-height: 1.85;
+      max-width: 400px;
+      margin-bottom: 52px;
+      animation: fadeUp 0.8s ease 0.3s both;
+    }
+
+    /* Feature pills */
+    .feature-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      animation: fadeUp 0.8s ease 0.4s both;
+    }
+    .pill {
+      padding: 8px 16px;
+      border: 1px solid rgba(196,113,58,0.28);
+      border-radius: 999px;
+      font-size: 12px;
+      color: rgba(250,243,232,0.65);
+      letter-spacing: 0.3px;
+      background: rgba(196,113,58,0.07);
+      backdrop-filter: blur(6px);
+      transition: all 0.3s;
+      cursor: default;
+    }
+    .pill:hover {
+      border-color: var(--clay);
+      color: var(--amber);
+      background: rgba(196,113,58,0.14);
+      transform: translateY(-2px);
+    }
+
+    /* Vertical rule */
+    .panel-divider {
+      width: 1px;
+      background: linear-gradient(to bottom, transparent 5%, rgba(196,113,58,0.28) 30%, rgba(196,113,58,0.28) 70%, transparent 95%);
+      flex-shrink: 0;
+    }
+
+    /* ── Right Panel (Form) ──────────────── */
+    .right-panel {
+      flex: 0.88;
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 52px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .right-panel::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, rgba(196,113,58,0.055) 0%, transparent 65%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .right-panel::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -80px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(74,92,58,0.06) 0%, transparent 65%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .form-container {
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      z-index: 10;
+      animation: fadeUp 0.7s ease 0.15s both;
+    }
+
+    .form-header { margin-bottom: 36px; }
+
+    .form-eyebrow {
+      font-size: 11px;
+      letter-spacing: 3.5px;
+      text-transform: uppercase;
+      color: var(--clay);
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .form-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      color: var(--dark);
+      line-height: 1.22;
+      margin-bottom: 10px;
+    }
+
+    .form-subtitle {
+      font-size: 14px;
+      color: rgba(26,17,10,0.5);
+    }
+    .form-subtitle a {
+      color: var(--clay);
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .form-subtitle a:hover { color: var(--bark); }
+
+    /* Form fields */
+    .field-group { display: flex; flex-direction: column; gap: 16px; margin-bottom: 26px; }
+
+    .field { position: relative; }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(26,17,10,0.55);
+      margin-bottom: 7px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 14px 18px 14px 46px;
+      border: 1.5px solid rgba(26,17,10,0.1);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--dark);
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .field input:focus {
+      border-color: var(--clay);
+      box-shadow: 0 0 0 4px rgba(196,113,58,0.1);
+    }
+    .field input::placeholder { color: rgba(26,17,10,0.28); }
+
+    .field-icon {
+      position: absolute;
+      bottom: 14px;
+      left: 15px;
+      font-size: 16px;
+      color: rgba(26,17,10,0.3);
+      pointer-events: none;
+      transition: color 0.25s;
+    }
+    .field:focus-within .field-icon { color: var(--clay); }
+
+    /* Primary button */
+    .btn-primary {
+      width: 100%;
+      padding: 15px;
+      background: var(--clay);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 50%);
+    }
+    .btn-primary:hover {
+      background: var(--bark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-clay);
+    }
+    .btn-primary:active { transform: translateY(0); }
+
+    /* ═══════════════════════════════════════════════════════
+       COMMON DASHBOARD LAYOUT
+    ═══════════════════════════════════════════════════════ */
+
+    /* ── Sidebar ─────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      z-index: 100;
+      overflow: hidden;
+      overflow-y: auto;
+    }
+
+    /* Ambient glow inside sidebar */
+    .sidebar::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 140% 45% at 50% 0%, rgba(196,113,58,0.13) 0%, transparent 55%),
+        radial-gradient(ellipse 100% 60% at 15% 100%, rgba(232,164,74,0.07) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .sidebar > * { position: relative; z-index: 1; }
+
+    .sidebar-brand {
+      padding: 26px 22px 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: var(--clay);
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(196,113,58,0.45);
+      position: relative;
+      overflow: hidden;
+    }
+    .logo-icon::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 55%);
+    }
+
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      color: var(--cream);
+      line-height: 1.2;
+    }
     .brand-name em { color: var(--amber); font-style: italic; }
-    .sidebar-user { padding: 20px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 12px; }
-    .user-avatar { width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg, var(--clay), var(--amber)); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .brand-tagline {
+      font-size: 10px;
+      color: rgba(250,243,232,0.3);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    /* User block */
+    .sidebar-user {
+      padding: 18px 22px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .user-avatar {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--clay), var(--amber));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .user-avatar .online-dot {
+      position: absolute;
+      bottom: -2px; right: -2px;
+      width: 10px; height: 10px;
+      background: #22c55e;
+      border-radius: 50%;
+      border: 2px solid var(--dark);
+    }
+
     .user-info { flex: 1; min-width: 0; }
-    .user-name { font-size: 14px; font-weight: 500; color: var(--cream); }
-    .sidebar-nav { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 2px; }
-    .nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: 10px; color: rgba(250,243,232,0.55); font-size: 14px; cursor: pointer; border: none; background: none; width: 100%; text-align: left; }
-    .nav-item:hover, .nav-item.active { background: rgba(196,113,58,0.2); color: var(--amber); }
-    .sidebar-footer { padding: 16px; border-top: 1px solid rgba(255,255,255,0.06); }
-    .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; width: 100%;}
-    .topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 32px; height: 68px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
-    .greeting-text { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--dark); }
-    .content { padding: 32px; flex: 1; }
 
-    /* --- WIDGETS & BUTTONS --- */
-    .widget { background: var(--card); border-radius: 18px; padding: 22px; border: 1px solid var(--border); }
-    .btn-sm { padding: 10px 16px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--bg); font-size: 13px; font-family: 'DM Sans'; font-weight: 500; cursor: pointer; transition: all 0.2s; color: var(--dark); }
-    .btn-sm:hover { border-color: var(--clay); color: var(--clay); background: var(--white); box-shadow: 0 2px 8px rgba(196,113,58,0.1); }
-    .btn-post { padding: 10px 20px; background: var(--clay); color: var(--white); border: none; border-radius: 10px; font-size: 13px; cursor: pointer; transition: background 0.2s;}
-    .btn-post:hover { background: var(--bark); }
+    .user-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--cream);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-    /* --- CHEF DASHBOARD SPECIFICS --- */
-    .main-grid { display: grid; grid-template-columns: 1fr; gap: 24px; max-width: 800px; }
-    .create-post-bar { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px 20px; display: flex; align-items: center; gap: 12px; margin-bottom: 20px; cursor: pointer; }
-    .recipe-card { background: var(--card); border-radius: 18px; border: 1px solid var(--border); padding: 20px; margin-bottom: 18px; }
-    .recipe-title { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--dark); margin-bottom: 8px; }
-    .recipe-desc { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
-    .recipe-tag { background: rgba(196,113,58,0.1); padding: 4px 10px; border-radius: 6px; font-size: 11px; color: var(--clay); }
+    /* Wallet block in sidebar */
+    .sidebar-wallet {
+      margin: 14px 16px;
+      padding: 16px;
+      background: rgba(255,255,255,0.04);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255,255,255,0.07);
+      flex-shrink: 0;
+    }
 
-    /* --- ADMIN DASHBOARD SPECIFICS --- */
-    #admin-wrapper .sidebar { background: var(--admin-accent); }
-    #admin-wrapper .logo-icon { background: rgba(255,255,255,0.15); }
-    #admin-wrapper .nav-item:hover, #admin-wrapper .nav-item.active { background: rgba(255,255,255,0.18); color: white; }
-    #admin-wrapper .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
-    #admin-wrapper .stat-card { background: var(--card); border-radius: 16px; padding: 22px; border: 1px solid var(--border); }
-    #admin-wrapper .stat-value { font-family: 'Playfair Display', serif; font-size: 30px; color: var(--dark); margin-bottom: 4px;}
-    #admin-wrapper .table-wrap { background: var(--card); border-radius: 18px; border: 1px solid var(--border); overflow: hidden; margin-top: 20px;}
-    #admin-wrapper table { width: 100%; border-collapse: collapse; }
-    #admin-wrapper th { padding: 13px 20px; text-align: left; font-size: 11px; color: rgba(26,17,10,0.4); border-bottom: 1px solid var(--border); text-transform: uppercase; }
-    #admin-wrapper td { padding: 14px 20px; font-size: 13px; color: var(--dark); border-bottom: 1px solid rgba(196,113,58,0.06); }
-    .badge { display: inline-flex; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 500; }
+    .wallet-label {
+      font-size: 10px;
+      color: rgba(250,243,232,0.38);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
+    }
+
+    #wallet-balance {
+      font-size: 26px;
+      color: var(--amber);
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 14px;
+      line-height: 1;
+    }
+
+    .wallet-pts-label {
+      font-size: 12px;
+      color: rgba(250,243,232,0.35);
+    }
+
+    .wallet-progress {
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 99px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .wallet-progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--clay), var(--amber));
+      border-radius: 99px;
+      width: 45%;
+      transition: width 1s ease;
+    }
+    .wallet-hint {
+      font-size: 10px;
+      color: rgba(250,243,232,0.28);
+      margin-bottom: 12px;
+    }
+
+    .buy-btn {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.25s;
+      margin-bottom: 7px;
+    }
+    .buy-btn:last-child { margin-bottom: 0; }
+
+    .buy-btn-basic {
+      background: rgba(255,255,255,0.07);
+      color: var(--cream);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .buy-btn-basic:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    .buy-btn-featured {
+      background: var(--clay);
+      color: white;
+    }
+    .buy-btn-featured:hover { background: var(--clay-dark); box-shadow: 0 4px 14px rgba(196,113,58,0.4); }
+
+    .buy-badge {
+      font-size: 10px;
+      background: rgba(255,255,255,0.2);
+      padding: 1px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.3px;
+    }
+
+    /* Nav */
+    .sidebar-nav {
+      flex: 1;
+      padding: 12px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-section-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(250,243,232,0.22);
+      padding: 10px 10px 5px;
+      font-weight: 500;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      color: rgba(250,243,232,0.52);
+      font-size: 13.5px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s ease;
+      letter-spacing: 0.1px;
+    }
+    .nav-item:hover {
+      background: rgba(196,113,58,0.12);
+      color: var(--cream);
+    }
+    .nav-item.active {
+      background: rgba(196,113,58,0.2);
+      color: var(--amber);
+    }
+    .nav-item .nav-icon { width: 20px; text-align: center; font-size: 15px; flex-shrink: 0; }
+
+    .sidebar-footer {
+      padding: 12px 12px 20px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+
+    /* ── Main Area ──────────────────────── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      width: calc(100% - var(--sidebar-w));
+    }
+
+    /* Top bar */
+    .topbar {
+      background: rgba(255,253,248,0.92);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      height: var(--topbar-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .topbar-left { display: flex; flex-direction: column; gap: 2px; }
+
+    .greeting-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--dark);
+      line-height: 1.2;
+    }
+    .greeting-text em { color: var(--clay); font-style: italic; }
+
+    .topbar-date {
+      font-size: 11px;
+      color: var(--muted-light);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Search */
+    .topbar-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg);
+      border: 1.5px solid transparent;
+      border-radius: 11px;
+      padding: 9px 14px;
+      width: 220px;
+      transition: all 0.25s;
+    }
+    .topbar-search:focus-within {
+      border-color: var(--clay);
+      background: var(--white);
+      box-shadow: 0 0 0 4px rgba(196,113,58,0.08);
+      width: 260px;
+    }
+    .topbar-search input {
+      border: none; background: none; outline: none;
+      font-size: 13px; font-family: 'DM Sans', sans-serif;
+      color: var(--dark); width: 100%;
+    }
+    .topbar-search input::placeholder { color: rgba(26,17,10,0.32); }
+
+    .icon-btn {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--muted);
+    }
+    .icon-btn:hover { border-color: var(--clay); color: var(--clay); background: rgba(196,113,58,0.05); }
+
+    /* Post button */
+    .btn-post {
+      padding: 10px 20px;
+      background: var(--clay);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex; align-items: center; gap: 6px;
+      letter-spacing: 0.2px;
+    }
+    .btn-post:hover {
+      background: var(--bark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-clay);
+    }
+    .btn-post:active { transform: translateY(0); }
+
+    /* Content area */
+    .content {
+      padding: 28px 32px 48px;
+      flex: 1;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       WIDGETS & CARDS
+    ═══════════════════════════════════════════════════════ */
+    .widget {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .widget-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      color: var(--dark);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Generic small button */
+    .btn-sm {
+      padding: 9px 16px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      font-size: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--dark);
+    }
+    .btn-sm:hover {
+      border-color: var(--clay);
+      color: var(--clay);
+      background: var(--white);
+      box-shadow: 0 2px 8px rgba(196,113,58,0.1);
+    }
+
+    /* Section header */
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--dark);
+    }
+    .section-link {
+      font-size: 12px;
+      color: var(--clay);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+      cursor: pointer;
+    }
+    .section-link:hover { color: var(--bark); }
+
+    /* ═══════════════════════════════════════════════════════
+       CHEF / USER DASHBOARD
+    ═══════════════════════════════════════════════════════ */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 310px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* ── Create post bar ─────────────────── */
+    .create-post-bar {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: var(--shadow-sm);
+    }
+    .create-post-bar:hover {
+      border-color: var(--clay);
+      box-shadow: 0 4px 18px rgba(196,113,58,0.1);
+      transform: translateY(-1px);
+    }
+
+    .create-avatar {
+      width: 40px; height: 40px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--clay), var(--amber));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .create-text {
+      flex: 1;
+      font-size: 14px;
+      color: rgba(26,17,10,0.38);
+    }
+
+    .create-actions {
+      display: flex; gap: 6px;
+    }
+    .create-action-btn {
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .create-action-btn:hover { border-color: var(--clay); color: var(--clay); }
+
+    /* ── Stats row ──────────────────────── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .stat-pill {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s;
+    }
+    .stat-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--border-mid);
+    }
+
+    .stat-pill-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .stat-pill-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--dark);
+      line-height: 1;
+      margin-bottom: 3px;
+    }
+
+    .stat-pill-label {
+      font-size: 11px;
+      color: var(--muted-light);
+      letter-spacing: 0.2px;
+    }
+
+    /* ── Recipe Feed ─────────────────────── */
+    .feed-column { display: flex; flex-direction: column; }
+
+    /* Recipe card — for the dynamic feed */
+    .recipe-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+      animation: fadeUp 0.5s ease both;
+    }
+    .recipe-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(196,113,58,0.11);
+      border-color: var(--border-mid);
+    }
+
+    /* Photo area at top of each card */
+    .recipe-photo {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, var(--clay) 0%, var(--amber) 60%, var(--bark-mid) 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* Woven texture overlay on photo */
+    .recipe-photo::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        repeating-linear-gradient(45deg, rgba(0,0,0,0.04) 0, rgba(0,0,0,0.04) 1px, transparent 0, transparent 12px);
+      z-index: 1;
+    }
+
+    /* Bottom gradient scrim */
+    .recipe-photo::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 80px;
+      background: linear-gradient(to top, rgba(26,17,10,0.6) 0%, transparent 100%);
+      z-index: 2;
+    }
+
+    .recipe-photo-emoji {
+      font-size: 64px;
+      z-index: 3;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+      transition: transform 0.4s ease;
+    }
+    .recipe-card:hover .recipe-photo-emoji { transform: scale(1.08); }
+
+    /* Photo upload hint (for future real photos) */
+    .photo-upload-hint {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: rgba(0,0,0,0.45);
+      border-radius: 7px;
+      padding: 5px 10px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.75);
+      z-index: 4;
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Card bottom labels on photo */
+    .recipe-photo-labels {
+      position: absolute;
+      bottom: 10px; left: 14px; right: 14px;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .recipe-tag {
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.4px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .recipe-lock-tag {
+      background: rgba(26,17,10,0.55);
+      backdrop-filter: blur(8px);
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      color: var(--amber);
+      letter-spacing: 0.4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Card body */
+    .recipe-body { padding: 20px 22px 18px; }
+
+    .recipe-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--dark);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .recipe-desc {
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+
+    /* Author row */
+    .recipe-author-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(196,113,58,0.08);
+    }
+
+    .author-chip {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--amber), var(--clay));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .author-name {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .author-name strong { color: rgba(26,17,10,0.72); font-weight: 500; }
+
+    .recipe-likes {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted-light);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .like-btn {
+      background: none; border: none; cursor: pointer;
+      padding: 6px 10px; border-radius: 8px;
+      font-size: 12px; color: var(--muted);
+      display: flex; align-items: center; gap: 4px;
+      transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+    }
+    .like-btn:hover { background: rgba(196,113,58,0.08); color: var(--clay); }
+
+    /* ── Right Column Widgets ────────────── */
+    .right-col { display: flex; flex-direction: column; gap: 18px; }
+
+    /* Points widget */
+    .points-widget {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .points-hero {
+      text-align: center;
+      padding: 16px 0 12px;
+    }
+
+    .points-big {
+      font-family: 'Playfair Display', serif;
+      font-size: 44px;
+      color: var(--clay);
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+
+    .points-sublabel {
+      font-size: 11px;
+      color: var(--muted-light);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .points-bar-outer {
+      margin: 14px 0 8px;
+      height: 6px;
+      background: rgba(196,113,58,0.1);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .points-bar-inner {
+      height: 100%;
+      background: linear-gradient(to right, var(--clay), var(--amber));
+      border-radius: 99px;
+      transition: width 1.2s ease;
+    }
+
+    .points-bar-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted-light);
+      margin-bottom: 16px;
+    }
+
+    .btn-earn {
+      width: 100%;
+      padding: 11px;
+      border: 1.5px solid rgba(196,113,58,0.3);
+      border-radius: 10px;
+      background: rgba(196,113,58,0.06);
+      color: var(--clay);
+      font-size: 12.5px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .btn-earn:hover { background: var(--clay); color: white; }
+
+    /* Trending widget */
+    .trend-list { display: flex; flex-direction: column; gap: 2px; }
+
+    .trend-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .trend-item:hover { background: rgba(196,113,58,0.06); }
+
+    .trend-rank {
+      font-family: 'Playfair Display', serif;
+      font-size: 13px;
+      color: rgba(196,113,58,0.35);
+      width: 22px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .trend-emoji { font-size: 20px; flex-shrink: 0; }
+
+    .trend-info { flex: 1; min-width: 0; }
+    .trend-name { font-size: 12.5px; font-weight: 500; color: var(--dark); }
+    .trend-count { font-size: 11px; color: var(--muted-light); }
+
+    .trend-pts {
+      font-size: 11px;
+      color: var(--clay);
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       ADMIN DASHBOARD
+    ═══════════════════════════════════════════════════════ */
+    #admin-wrapper .sidebar {
+      background: var(--admin-accent);
+    }
+    #admin-wrapper .sidebar::before {
+      background:
+        radial-gradient(ellipse 140% 40% at 50% 0%, rgba(255,255,255,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 100% 60% at 15% 100%, rgba(255,255,255,0.04) 0%, transparent 60%);
+    }
+    #admin-wrapper .logo-icon { background: rgba(255,255,255,0.14); }
+    #admin-wrapper .nav-item:hover { background: rgba(255,255,255,0.12); color: white; }
+    #admin-wrapper .nav-item.active { background: rgba(255,255,255,0.18); color: white; }
+
+    /* Admin stats */
+    .admin-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s;
+    }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      top: -30px; right: -30px;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(196,113,58,0.07) 0%, transparent 70%);
+    }
+
+    .stat-card-icon { font-size: 26px; margin-bottom: 12px; display: block; }
+
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--dark);
+      margin-bottom: 4px;
+      line-height: 1;
+    }
+
+    .stat-label { font-size: 12px; color: var(--muted); }
+
+    /* Admin main grid */
+    .admin-main-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* Table */
+    .table-wrap {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .table-wrap table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table-wrap th {
+      padding: 13px 18px;
+      text-align: left;
+      font-size: 10.5px;
+      color: rgba(26,17,10,0.4);
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 500;
+      background: rgba(242,232,216,0.5);
+    }
+
+    .table-wrap td {
+      padding: 13px 18px;
+      font-size: 13px;
+      color: var(--dark);
+      border-bottom: 1px solid rgba(196,113,58,0.06);
+      vertical-align: middle;
+    }
+
+    .table-wrap tr:last-child td { border-bottom: none; }
+    .table-wrap tr:hover td { background: rgba(196,113,58,0.025); }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
     .badge-admin { background: rgba(139,26,26,0.12); color: var(--admin-accent); }
-    .badge-user { background: rgba(196,113,58,0.1); color: var(--clay); }
+    .badge-user  { background: rgba(196,113,58,0.1); color: var(--clay); }
+    .badge-chef  { background: rgba(34,197,94,0.1); color: #16a34a; }
 
-    /* --- MODALS --- */
-    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center; }
+    /* Activity feed in admin */
+    .activity-feed { display: flex; flex-direction: column; }
+
+    .activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(196,113,58,0.07);
+    }
+    .activity-item:last-child { border-bottom: none; }
+
+    .activity-icon {
+      width: 34px; height: 34px;
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .activity-text { font-size: 12.5px; color: rgba(26,17,10,0.7); line-height: 1.55; }
+    .activity-text strong { color: var(--dark); font-weight: 500; }
+    .activity-time { font-size: 11px; color: var(--muted-light); margin-top: 2px; }
+
+    /* Transaction items */
+    .tx-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .tx-item:last-child { border-bottom: none; }
+
+    /* ═══════════════════════════════════════════════════════
+       MODALS
+    ═══════════════════════════════════════════════════════ */
+    .modal-backdrop {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(20,10,4,0.55);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
     .modal-backdrop.open { display: flex; }
-    .modal { background: var(--white); border-radius: 20px; padding: 36px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; }
-    .modal-header { display: flex; justify-content: space-between; margin-bottom: 24px; }
-    .modal-title { font-family: 'Playfair Display', serif; font-size: 22px; }
-    .modal-close { background: transparent; border: none; cursor: pointer; font-size: 18px; }
+
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 36px;
+      width: 100%;
+      max-width: 580px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--dark);
+    }
+
+    .modal-close {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      font-size: 16px;
+      color: var(--muted);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .modal-close:hover { border-color: var(--clay); color: var(--clay); }
+
+    /* Points cost selector in modal */
+    .points-cost-selector {
+      margin-bottom: 18px;
+    }
+
+    .points-cost-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(26,17,10,0.55);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .points-tiers {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .tier-btn {
+      padding: 10px 8px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .tier-btn:hover { border-color: var(--clay); background: rgba(196,113,58,0.05); }
+    .tier-btn.selected { border-color: var(--clay); background: rgba(196,113,58,0.1); }
+    .tier-btn .tier-pts { font-size: 14px; font-weight: 500; color: var(--clay); display: block; font-family: 'Playfair Display', serif; }
+    .tier-btn .tier-label { font-size: 10px; color: var(--muted); letter-spacing: 0.3px; }
+
+    /* Photo upload in modal */
+    .photo-upload-zone {
+      border: 2px dashed rgba(196,113,58,0.3);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s;
+      background: rgba(196,113,58,0.02);
+      margin-bottom: 18px;
+    }
+    .photo-upload-zone:hover {
+      border-color: var(--clay);
+      background: rgba(196,113,58,0.05);
+    }
+    .upload-icon { font-size: 32px; margin-bottom: 10px; }
+    .upload-text { font-size: 14px; color: rgba(26,17,10,0.6); margin-bottom: 4px; }
+    .upload-sub { font-size: 11px; color: var(--muted-light); }
+    .upload-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .upload-preview-thumb {
+      width: 60px; height: 60px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--clay), var(--amber));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
     .modal-field { margin-bottom: 18px; }
-    .modal-field label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
-    .modal-field input, .modal-field textarea, .modal-field select { width: 100%; padding: 13px 16px; border: 1.5px solid rgba(26,17,10,0.12); border-radius: 12px; outline: none; }
+
+    .modal-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(26,17,10,0.55);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 8px;
+    }
+
+    .modal-field input,
+    .modal-field textarea,
+    .modal-field select {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid rgba(26,17,10,0.1);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--dark);
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.25s, box-shadow 0.25s;
+      resize: vertical;
+    }
+    .modal-field input:focus,
+    .modal-field textarea:focus,
+    .modal-field select:focus {
+      border-color: var(--clay);
+      box-shadow: 0 0 0 4px rgba(196,113,58,0.09);
+    }
+
+    /* Modal 2-column row */
+    .modal-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .modal-row .modal-field { margin-bottom: 0; }
+
+    /* Ingredient row */
+    .ingredient-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      align-items: center;
+      animation: fadeUp 0.25s ease;
+    }
+    .ingredient-row input {
+      padding: 10px 12px;
+      border: 1.5px solid rgba(26,17,10,0.1);
+      border-radius: 10px;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--dark);
+      background: var(--bg);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .ingredient-row input:focus { border-color: var(--clay); background: var(--white); }
+    .ingredient-row select {
+      padding: 10px 8px;
+      border: 1.5px solid rgba(26,17,10,0.1);
+      border-radius: 10px;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--dark);
+      background: var(--bg);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .ingredient-row select:focus { border-color: var(--clay); background: var(--white); }
+    .del-ingredient-btn {
+      width: 34px; height: 34px;
+      border: 1.5px solid rgba(192,57,43,0.25);
+      border-radius: 9px;
+      background: transparent;
+      color: var(--error);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+    .del-ingredient-btn:hover { background: var(--error); color: white; border-color: var(--error); }
+
+    /* Ingredient scaler in feed */
+    .scaler-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .scaler-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--clay);
+      letter-spacing: 0.6px;
+    }
+    .scaler-control {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      overflow: hidden;
+    }
+    .scale-btn {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--dark);
+      padding: 4px 12px;
+      transition: background 0.15s;
+      line-height: 1;
+    }
+    .scale-btn:hover { background: rgba(196,113,58,0.1); }
+
+    .serving-display {
+      font-size: 11px;
+      font-weight: 500;
+      min-width: 72px;
+      text-align: center;
+      color: var(--dark);
+      padding: 4px 2px;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+
+    /* Locked recipe overlay */
+    .locked-overlay {
+      margin: 12px 0;
+      padding: 22px 18px;
+      background: rgba(26,17,10,0.03);
+      border-radius: var(--radius-md);
+      border: 1.5px dashed rgba(26,17,10,0.15);
+      text-align: center;
+    }
+    .locked-icon { font-size: 28px; margin-bottom: 8px; }
+    .locked-title { font-size: 14px; font-weight: 500; color: var(--dark); margin-bottom: 4px; }
+    .locked-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; line-height: 1.55; }
+    .unlock-btn {
+      background: linear-gradient(135deg, var(--amber), var(--clay));
+      border: none;
+      border-radius: 10px;
+      padding: 10px 24px;
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      color: var(--dark);
+      cursor: pointer;
+      transition: all 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(232,164,74,0.35);
+    }
+    .unlock-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(232,164,74,0.45);
+    }
+
+    /* Ingredients list in feed */
+    .ingredient-grid {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+      font-size: 13px;
+      color: var(--dark);
+    }
+    .ingredient-grid li {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ingredient-grid li::before {
+      content: '•';
+      color: var(--clay);
+      font-size: 16px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .ing-val { color: var(--bark); font-weight: 600; }
+    .ing-unit-label { color: var(--muted); font-size: 11px; }
+
+    /* Publish button in modal */
+    .btn-publish {
+      width: 100%;
+      padding: 15px;
+      background: var(--clay);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.25s;
+      margin-top: 8px;
+    }
+    .btn-publish:hover { background: var(--bark); transform: translateY(-1px); box-shadow: var(--shadow-clay); }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      background: var(--dark);
+      color: var(--cream);
+      padding: 14px 22px;
+      border-radius: 14px;
+      font-size: 14px;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 999;
+      border-left: 3px solid var(--clay);
+      max-width: 320px;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ═══════════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════════ */
+    @media (max-width: 1100px) {
+      .main-grid { grid-template-columns: 1fr; }
+      .right-col { display: grid; grid-template-columns: 1fr 1fr; }
+      .admin-main-grid { grid-template-columns: 1fr; }
+      .admin-stats-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 860px) {
+      .left-panel { display: none; }
+      .panel-divider { display: none; }
+      .right-panel { flex: 1; background: linear-gradient(158deg, #140C06 0%, #2A180C 100%); }
+      .form-title { color: var(--white); }
+      .form-eyebrow { color: var(--amber); }
+      .form-subtitle { color: rgba(250,243,232,0.45); }
+      .form-subtitle a { color: var(--amber); }
+      .field label { color: rgba(255,255,255,0.45); }
+      .field input { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.1); color: white; }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; width: 100%; }
+      .content { padding: 20px; }
+      .admin-stats-grid { grid-template-columns: 1fr 1fr; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .modal-row { grid-template-columns: 1fr; }
+      .points-tiers { grid-template-columns: repeat(2, 1fr); }
+    }
   </style>
 </head>
 <body>
 
+  <!-- ═══════════════════════════════════════════════════════
+       AUTH SCREEN
+  ═══════════════════════════════════════════════════════ -->
   <div id="auth-wrapper">
     <div class="left-panel">
       <div class="bg-art"></div>
-      <div class="bg-pattern"></div>
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+
       <div class="left-content">
         <div class="brand-mark">
           <div class="auth-logo-icon">🍳</div>
-          <div class="auth-brand-name">Mise <span>en Place</span></div>
+          <div>
+            <div class="auth-brand-name">Mise <span>en Place</span></div>
+            <div style="font-size:10px; color:rgba(250,243,232,0.3); letter-spacing:2px; text-transform:uppercase; margin-top:3px;">Community Kitchen</div>
+          </div>
         </div>
-        <div class="hero-text">
-          <h1 class="hero-heading">Where every<br>recipe tells<span class="accent">a story.</span></h1>
+
+        <div class="hero-eyebrow">Para sa mga Lutuin ng Puso</div>
+
+        <h1 class="hero-heading">
+          Where every<br>recipe tells
+          <span class="accent">a story.</span>
+        </h1>
+
+        <p class="hero-desc">
+          A home for home cooks, chefs, and culinary creators across the Philippines. Share dishes, earn points, build community.
+        </p>
+
+        <div class="feature-pills">
+          <span class="pill">🍜 Smart Scaling</span>
+          <span class="pill">🏅 Points & Rewards</span>
+          <span class="pill">📸 Photo Recipes</span>
+          <span class="pill">🤝 Community</span>
         </div>
       </div>
     </div>
+
     <div class="panel-divider"></div>
+
     <div class="right-panel">
+      <!-- REGISTER FORM -->
       <div id="register-section" class="form-container hidden">
         <div class="form-header">
           <div class="form-eyebrow">Join the kitchen</div>
           <h2 class="form-title">Create an account</h2>
-          <p class="form-subtitle">Already have an account? <a onclick="toggleAuth('login')">Log in →</a></p>
+          <p class="form-subtitle">Already have an account? <a onclick="toggleAuth('login')">Sign in →</a></p>
         </div>
+
         <div class="field-group">
-          <div class="field"><label>Email Address</label><input type="email" id="reg-email" placeholder="yourname@email.com"></div>
-          <div class="field"><label>Password</label><input type="password" id="reg-password" placeholder="••••••••"></div>
+          <div class="field">
+            <label>Email Address</label>
+            <input type="email" id="reg-email" placeholder="yourname@email.com" autocomplete="email"/>
+            <span class="field-icon">✉</span>
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" id="reg-password" placeholder="Min. 8 characters" autocomplete="new-password"/>
+            <span class="field-icon">🔒</span>
+          </div>
         </div>
+
         <button class="btn-primary" onclick="registerUser()">Create Account</button>
+
+        <p style="text-align:center; font-size:11px; color:rgba(26,17,10,0.35); margin-top:18px; line-height:1.5;">
+          By creating an account you agree to our Terms of Service and Privacy Policy.
+        </p>
       </div>
 
+      <!-- LOGIN FORM -->
       <div id="login-section" class="form-container">
         <div class="form-header">
           <div class="form-eyebrow">Welcome back</div>
           <h2 class="form-title">Sign in to your kitchen</h2>
           <p class="form-subtitle">New here? <a onclick="toggleAuth('register')">Create an account →</a></p>
         </div>
+
         <div class="field-group">
-          <div class="field"><label>Email Address</label><input type="email" id="login-email" placeholder="yourname@email.com"></div>
-          <div class="field"><label>Password</label><input type="password" id="login-password" placeholder="••••••••"></div>
+          <div class="field">
+            <label>Email Address</label>
+            <input type="email" id="login-email" placeholder="yourname@email.com" autocomplete="email"/>
+            <span class="field-icon">✉</span>
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password"/>
+            <span class="field-icon">🔒</span>
+          </div>
         </div>
+
+        <div style="display:flex; justify-content:flex-end; margin-bottom:22px;">
+          <a href="#" style="font-size:13px; color:var(--clay); text-decoration:none; font-weight:500;">Forgot password?</a>
+        </div>
+
         <button class="btn-primary" onclick="loginUser()">Sign In</button>
+
+        <div style="display:flex; align-items:center; gap:14px; margin:22px 0; color:rgba(26,17,10,0.25); font-size:12px; letter-spacing:1px;">
+          <div style="flex:1; height:1px; background:rgba(26,17,10,0.08);"></div>
+          OR
+          <div style="flex:1; height:1px; background:rgba(26,17,10,0.08);"></div>
+        </div>
+
+        <button onclick="toggleAuth('register')" style="width:100%; padding:13px; border:1.5px solid var(--border); border-radius:var(--radius-md); background:transparent; font-size:14px; font-family:'DM Sans', sans-serif; color:rgba(26,17,10,0.65); cursor:pointer; transition:all 0.2s;" onmouseover="this.style.borderColor='var(--clay)'; this.style.color='var(--clay)';" onmouseout="this.style.borderColor='var(--border)'; this.style.color='rgba(26,17,10,0.65)';">
+          Create a free account
+        </button>
       </div>
     </div>
   </div>
 
+
+  <!-- ═══════════════════════════════════════════════════════
+       CHEF / USER DASHBOARD
+  ═══════════════════════════════════════════════════════ -->
   <div id="dashboard-wrapper" class="hidden">
     <aside class="sidebar">
       <div class="sidebar-brand">
         <div class="logo-icon">🍳</div>
-        <div class="brand-name">Mise <em>en Place</em></div>
+        <div>
+          <div class="brand-name">Mise <em>en Place</em></div>
+          <div class="brand-tagline">Community Kitchen</div>
+        </div>
       </div>
+
       <div class="sidebar-user">
-        <div class="user-avatar">🧑‍🍳</div>
+        <div class="user-avatar">
+          🧑‍🍳
+          <div class="online-dot"></div>
+        </div>
         <div class="user-info">
           <div class="user-name" id="sidebar-name">Loading...</div>
-          <div style="font-size:11px; color:var(--amber);">Chef <span onclick="openEditProfile()" style="cursor:pointer; color:var(--cream); text-decoration:underline;">Edit</span></div>
+          <div style="font-size:11px; color:var(--amber); margin-top:2px;">
+            Home Cook &nbsp;·&nbsp; <span onclick="openEditProfile()" style="cursor:pointer; color:rgba(250,243,232,0.5); text-decoration:underline; font-size:10px;">Edit</span>
+          </div>
         </div>
       </div>
-      
-      <div style="margin: 16px 20px; padding: 16px; background: rgba(255,255,255,0.04); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
-        <div style="font-size: 11px; color: rgba(250,243,232,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">🏅 Digital Wallet</div>
-        <div style="font-size: 24px; color: var(--amber); font-family: 'Playfair Display', serif; margin-bottom: 16px;" id="wallet-balance">0 <span style="font-size:12px; color:rgba(250,243,232,0.4);">pts</span></div>
-        
-        <button class="btn-sm" style="width: 100%; margin-bottom: 8px; display:flex; justify-content:space-between; background:rgba(255,255,255,0.08); border:none; color:var(--cream);" onclick="buyPoints(500, 500)">
-          <span>500 pts</span> <strong>₱500</strong>
+
+      <!-- Digital Wallet -->
+      <div class="sidebar-wallet">
+        <div class="wallet-label">🏅 Digital Wallet</div>
+        <div id="wallet-balance">0 <span class="wallet-pts-label">pts</span></div>
+        <div class="wallet-progress">
+          <div class="wallet-progress-fill" id="wallet-fill"></div>
+        </div>
+        <div class="wallet-hint">Post recipes or purchase to earn more points</div>
+
+        <button class="buy-btn buy-btn-basic" onclick="buyPoints(500, 500)">
+          <span>500 points</span>
+          <span><strong>₱500</strong></span>
         </button>
-        <button class="btn-sm" style="width: 100%; display:flex; justify-content:space-between; background:var(--clay); border:none; color:white;" onclick="buyPoints(1200, 1000)">
-          <span>1,200 pts</span> <strong>₱1k</strong>
+        <button class="buy-btn buy-btn-featured" onclick="buyPoints(1200, 1000)">
+          <span>1,200 points <span class="buy-badge">BEST</span></span>
+          <span><strong>₱1,000</strong></span>
         </button>
       </div>
 
       <nav class="sidebar-nav">
-        <button class="nav-item active">🏠 Feed</button>
+        <div class="nav-section-label">Discover</div>
+        <button class="nav-item active"><span class="nav-icon">🏠</span> Community Feed</button>
+        <button class="nav-item"><span class="nav-icon">🔍</span> Explore Recipes</button>
+        <button class="nav-item"><span class="nav-icon">📖</span> My Recipes</button>
+        <button class="nav-item"><span class="nav-icon">🔖</span> Saved</button>
+        <div class="nav-section-label">Account</div>
+        <button class="nav-item"><span class="nav-icon">👤</span> Profile</button>
+        <button class="nav-item"><span class="nav-icon">🔔</span> Notifications</button>
+        <button class="nav-item"><span class="nav-icon">🛒</span> Marketplace</button>
       </nav>
+
       <div class="sidebar-footer">
-        <button class="nav-item" onclick="logoutUser()">🚪 Sign Out</button>
+        <button class="nav-item" onclick="logoutUser()" style="color:rgba(255,100,100,0.6);">
+          <span class="nav-icon">🚪</span> Sign Out
+        </button>
       </div>
     </aside>
 
     <div class="main">
       <header class="topbar">
-        <div class="greeting-text">Welcome back, <em id="topbar-name">Chef</em></div>
-        <button class="btn-post" onclick="openModal()">+ Share Recipe</button>
+        <div class="topbar-left">
+          <div class="greeting-text">Good day, <em id="topbar-name">Chef</em> 🌿</div>
+          <div class="topbar-date" id="topbar-date"></div>
+        </div>
+        <div class="topbar-actions">
+          <div class="topbar-search">
+            <span style="font-size:14px; color:rgba(26,17,10,0.3);">🔍</span>
+            <input type="text" placeholder="Search recipes, cooks..."/>
+          </div>
+          <button class="icon-btn" title="Notifications">🔔</button>
+          <button class="btn-post" onclick="openModal()">+ Share Recipe</button>
+        </div>
       </header>
+
       <div class="content">
+        <!-- Quick stats -->
+        <div class="stats-row">
+          <div class="stat-pill">
+            <span class="stat-pill-icon">📖</span>
+            <div>
+              <div class="stat-pill-value">0</div>
+              <div class="stat-pill-label">Recipes Shared</div>
+            </div>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-pill-icon">❤️</span>
+            <div>
+              <div class="stat-pill-value">0</div>
+              <div class="stat-pill-label">Total Likes</div>
+            </div>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-pill-icon">👥</span>
+            <div>
+              <div class="stat-pill-value">0</div>
+              <div class="stat-pill-label">Followers</div>
+            </div>
+          </div>
+        </div>
+
         <div class="main-grid">
+          <!-- Feed column -->
           <div class="feed-column">
-            <h2 style="font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 18px;">Community Feed</h2>
-            <div id="recipe-feed"><p style="color: var(--muted);">Loading recipes...</p></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+            <!-- Create post bar -->
+            <div class="create-post-bar" onclick="openModal()">
+              <div class="create-avatar">🧑‍🍳</div>
+              <div class="create-text">Share a recipe with the community...</div>
+              <div class="create-actions">
+                <button class="create-action-btn">📸 Photo</button>
+                <button class="create-action-btn">🎥 Video</button>
+              </div>
+            </div>
 
-  <div id="admin-wrapper" class="hidden">
-    <aside class="sidebar">
-      <div class="sidebar-brand">
-        <div class="logo-icon">⚙️</div>
-        <div class="brand-name">Mise <em>en Place</em></div>
-      </div>
-      <div class="sidebar-user">
-        <div class="user-avatar">🛡️</div>
-        <div>
-          <div class="user-name" style="color:white; font-size:14px;">Administrator</div>
-        </div>
-      </div>
-      <nav class="sidebar-nav">
-        <button class="nav-item active">📊 Dashboard</button>
-      </nav>
-      <div class="sidebar-footer">
-        <button class="nav-item" onclick="logoutUser()">🚪 Sign Out</button>
-      </div>
-    </aside>
+            <div class="section-header">
+              <h2 class="section-title">Community Feed</h2>
+              <span class="section-link">See trending →</span>
+            </div>
 
-    <div class="main">
-      <header class="topbar">
-        <div class="greeting-text">Admin <em style="color:var(--admin-accent)">Dashboard</em></div>
-      </header>
-      <div class="content">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-value" id="admin-total-users">0</div>
-            <div style="font-size:12px; color:var(--muted)">Total Registered Users</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="admin-total-revenue" style="color:#16a34a;">₱ 0</div>
-            <div style="font-size:12px; color:var(--muted)">Total Revenue</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="admin-total-points" style="color:var(--amber);">0</div>
-            <div style="font-size:12px; color:var(--muted)">Points Sold</div>
-          </div>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-          <div>
-            <h2 style="font-family: 'Playfair Display', serif; font-size: 20px;">System Users</h2>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Email</th><th>Role</th><th>Joined</th></tr></thead>
-                <tbody id="admin-user-table"><tr><td colspan="3">Loading users...</td></tr></tbody>
-              </table>
+            <div id="recipe-feed">
+              <!-- Skeleton loader -->
+              <div style="background:var(--card); border-radius:var(--radius-lg); border:1px solid var(--border); overflow:hidden; margin-bottom:20px;">
+                <div style="height:180px; background: linear-gradient(90deg, var(--bg) 25%, var(--bg-deep) 50%, var(--bg) 75%); background-size:200% 100%; animation: shimmer 1.8s infinite;"></div>
+                <div style="padding:20px;">
+                  <div style="height:12px; background:var(--bg); border-radius:6px; margin-bottom:10px; width:30%; animation: shimmer 1.8s infinite; background-size:200% 100%;"></div>
+                  <div style="height:22px; background:var(--bg); border-radius:6px; margin-bottom:8px; width:70%; animation: shimmer 1.8s infinite; background-size:200% 100%;"></div>
+                  <div style="height:14px; background:var(--bg); border-radius:6px; width:90%; animation: shimmer 1.8s infinite; background-size:200% 100%;"></div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div>
-            <h2 style="font-family: 'Playfair Display', serif; font-size: 20px;">Recent Transactions</h2>
-            <div class="widget" style="margin-top: 20px; padding: 0 22px;">
-              <div id="admin-transactions-list">
-                <p style="color: var(--muted); font-size: 12px; padding: 20px 0;">Loading ledger...</p>
+          <!-- Right column -->
+          <div class="right-col">
+            <!-- Points widget -->
+            <div class="points-widget widget">
+              <div class="widget-title">🏅 Your Points</div>
+              <div class="points-hero">
+                <div class="points-big">0</div>
+                <div class="points-sublabel">Available Points</div>
+              </div>
+              <div class="points-bar-outer">
+                <div class="points-bar-inner" style="width:5%;"></div>
+              </div>
+              <div class="points-bar-labels">
+                <span>Starter</span>
+                <span>Gold at 2,000 pts</span>
+              </div>
+              <button class="btn-earn">✨ Earn More Points</button>
+            </div>
+
+            <!-- Trending widget -->
+            <div class="widget">
+              <div class="widget-title">🔥 Trending Today</div>
+              <div class="trend-list">
+                <div class="trend-item">
+                  <div class="trend-rank">#1</div>
+                  <div class="trend-emoji">🍲</div>
+                  <div class="trend-info">
+                    <div class="trend-name">Kare-Kare Nouveau</div>
+                    <div class="trend-count">2.4k views</div>
+                  </div>
+                  <div class="trend-pts">🏅 30</div>
+                </div>
+                <div class="trend-item">
+                  <div class="trend-rank">#2</div>
+                  <div class="trend-emoji">🍮</div>
+                  <div class="trend-info">
+                    <div class="trend-name">Leche Flan Supreme</div>
+                    <div class="trend-count">1.8k views</div>
+                  </div>
+                  <div class="trend-pts">🏅 20</div>
+                </div>
+                <div class="trend-item">
+                  <div class="trend-rank">#3</div>
+                  <div class="trend-emoji">🥘</div>
+                  <div class="trend-info">
+                    <div class="trend-name">Dinuguan Moderna</div>
+                    <div class="trend-count">1.2k views</div>
+                  </div>
+                  <div class="trend-pts">🏅 25</div>
+                </div>
+                <div class="trend-item">
+                  <div class="trend-rank">#4</div>
+                  <div class="trend-emoji">🍰</div>
+                  <div class="trend-info">
+                    <div class="trend-name">Ube Basque Cheesecake</div>
+                    <div class="trend-count">980 views</div>
+                  </div>
+                  <div class="trend-pts">🏅 15</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- How to earn points -->
+            <div class="widget" style="background: linear-gradient(135deg, #2A180C, #1A110A); border-color: rgba(232,164,74,0.2);">
+              <div class="widget-title" style="color:var(--amber);">💡 Earn Points</div>
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <span style="font-size:16px;">📖</span>
+                  <div>
+                    <div style="font-size:12px; font-weight:500; color:var(--cream);">Post a recipe</div>
+                    <div style="font-size:11px; color:rgba(250,243,232,0.4);">+50 pts per post</div>
+                  </div>
+                </div>
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <span style="font-size:16px;">💬</span>
+                  <div>
+                    <div style="font-size:12px; font-weight:500; color:var(--cream);">Leave a comment</div>
+                    <div style="font-size:11px; color:rgba(250,243,232,0.4);">+5 pts</div>
+                  </div>
+                </div>
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <span style="font-size:16px;">❤️</span>
+                  <div>
+                    <div style="font-size:12px; font-weight:500; color:var(--cream);">Receive a like</div>
+                    <div style="font-size:11px; color:rgba(250,243,232,0.4);">+2 pts</div>
+                  </div>
+                </div>
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <span style="font-size:16px;">🛒</span>
+                  <div>
+                    <div style="font-size:12px; font-weight:500; color:var(--cream);">Purchase points</div>
+                    <div style="font-size:11px; color:rgba(250,243,232,0.4);">500pts for ₱500</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -274,71 +2111,320 @@
     </div>
   </div>
 
+
+  <!-- ═══════════════════════════════════════════════════════
+       ADMIN DASHBOARD
+  ═══════════════════════════════════════════════════════ -->
+  <div id="admin-wrapper" class="hidden">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="logo-icon">⚙️</div>
+        <div>
+          <div class="brand-name">Mise <em>en Place</em></div>
+          <div class="brand-tagline" style="color:rgba(255,200,150,0.4);">Admin Panel</div>
+        </div>
+      </div>
+
+      <div class="sidebar-user">
+        <div class="user-avatar" style="background:rgba(255,255,255,0.15);">🛡️</div>
+        <div class="user-info">
+          <div class="user-name">Administrator</div>
+          <div style="font-size:10px; color:rgba(255,200,150,0.6); margin-top:2px; letter-spacing:0.5px;">FULL ACCESS</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Overview</div>
+        <button class="nav-item active"><span class="nav-icon">📊</span> Dashboard</button>
+        <button class="nav-item"><span class="nav-icon">📈</span> Analytics</button>
+        <div class="nav-section-label">Manage</div>
+        <button class="nav-item"><span class="nav-icon">👥</span> Users</button>
+        <button class="nav-item"><span class="nav-icon">📖</span> Recipes</button>
+        <button class="nav-item"><span class="nav-icon">🚩</span> Flagged Content</button>
+        <button class="nav-item"><span class="nav-icon">🏅</span> Points Economy</button>
+        <button class="nav-item"><span class="nav-icon">🛒</span> Marketplace</button>
+        <div class="nav-section-label">System</div>
+        <button class="nav-item"><span class="nav-icon">⚙️</span> Settings</button>
+        <button class="nav-item"><span class="nav-icon">🔑</span> Roles & Access</button>
+        <button class="nav-item"><span class="nav-icon">📋</span> Audit Log</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="nav-item" onclick="logoutUser()" style="color:rgba(255,150,150,0.6);">
+          <span class="nav-icon">🚪</span> Sign Out
+        </button>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="greeting-text">Admin <em style="color:var(--admin-accent)">Dashboard</em></div>
+          <div class="topbar-date" id="admin-date-display"></div>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-btn">🔔</button>
+          <button class="icon-btn">⚙️</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- Admin stats -->
+        <div class="admin-stats-grid">
+          <div class="stat-card">
+            <span class="stat-card-icon">👥</span>
+            <div class="stat-value" id="admin-total-users">—</div>
+            <div class="stat-label">Registered Users</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card-icon">💚</span>
+            <div class="stat-value" id="admin-total-revenue" style="color:#16a34a;">₱ —</div>
+            <div class="stat-label">Total Revenue</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card-icon">🏅</span>
+            <div class="stat-value" id="admin-total-points" style="color:var(--amber);">—</div>
+            <div class="stat-label">Points Sold</div>
+          </div>
+        </div>
+
+        <div class="admin-main-grid">
+          <!-- Users table -->
+          <div>
+            <div class="section-header">
+              <h2 class="section-title">System Users</h2>
+              <div style="display:flex; gap:8px;">
+                <button class="btn-sm">Export CSV</button>
+                <button class="btn-sm" style="background:var(--admin-accent); color:white; border-color:var(--admin-accent);">+ Add User</button>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Joined</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-user-table">
+                  <tr>
+                    <td colspan="3" style="text-align:center; color:var(--muted); padding:28px;">
+                      <div style="font-size:24px; margin-bottom:8px;">⏳</div>
+                      Loading users...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Right: transactions + activity -->
+          <div style="display:flex; flex-direction:column; gap:20px;">
+            <div>
+              <div class="section-header">
+                <h2 class="section-title">Recent Transactions</h2>
+              </div>
+              <div class="widget" style="padding:0 22px;">
+                <div id="admin-transactions-list" class="activity-feed">
+                  <div style="text-align:center; padding:24px 0; color:var(--muted); font-size:12px;">
+                    Loading ledger...
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Activity feed -->
+            <div>
+              <div class="section-header">
+                <h2 class="section-title">Live Activity</h2>
+              </div>
+              <div class="widget" style="padding: 0 22px;">
+                <div class="activity-feed">
+                  <div class="activity-item">
+                    <div class="activity-icon" style="background:rgba(34,197,94,0.1);">👤</div>
+                    <div>
+                      <div class="activity-text"><strong>New user</strong> registered — Maria Gomez</div>
+                      <div class="activity-time">2 min ago</div>
+                    </div>
+                  </div>
+                  <div class="activity-item">
+                    <div class="activity-icon" style="background:rgba(196,113,58,0.1);">📖</div>
+                    <div>
+                      <div class="activity-text"><strong>Recipe posted</strong> — Kare-Kare Nouveau</div>
+                      <div class="activity-time">11 min ago</div>
+                    </div>
+                  </div>
+                  <div class="activity-item">
+                    <div class="activity-icon" style="background:rgba(239,68,68,0.1);">🚩</div>
+                    <div>
+                      <div class="activity-text"><strong>Flagged</strong> — Spam comment reported</div>
+                      <div class="activity-time">34 min ago</div>
+                    </div>
+                  </div>
+                  <div class="activity-item">
+                    <div class="activity-icon" style="background:rgba(232,164,74,0.12);">🏅</div>
+                    <div>
+                      <div class="activity-text"><strong>Points purchased</strong> — 500pts by user #7821</div>
+                      <div class="activity-time">1 hr ago</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       SHARE RECIPE MODAL
+  ═══════════════════════════════════════════════════════ -->
   <div class="modal-backdrop" id="recipeModal">
     <div class="modal">
       <div class="modal-header">
         <div class="modal-title">Share a Recipe 🍳</div>
         <button class="modal-close" onclick="closeModal()">✕</button>
       </div>
-      
+
+      <!-- Photo upload zone -->
+      <div class="photo-upload-zone" onclick="document.getElementById('photo-input').click()">
+        <input type="file" id="photo-input" accept="image/*,video/*" multiple style="display:none;" onchange="handlePhotoPreview(this)"/>
+        <div class="upload-icon">📸</div>
+        <div class="upload-text">Drop your food photos or videos here</div>
+        <div class="upload-sub">PNG, JPG, MP4 — up to 50MB · First photo becomes your cover</div>
+        <div class="upload-preview" id="upload-preview"></div>
+      </div>
+
       <div class="modal-field">
         <label>Recipe Title</label>
-        <input type="text" id="post-title" placeholder="e.g. Lola's Sinigang">
+        <input type="text" id="post-title" placeholder="e.g. Lola's Sinigang sa Bayabas"/>
       </div>
-      
+
       <div class="modal-field">
         <label>Description & Steps</label>
-        <textarea id="post-desc" rows="3" placeholder="Tell the story and steps behind this dish..."></textarea>
+        <textarea id="post-desc" rows="3" placeholder="Tell the story behind this dish and how to cook it..."></textarea>
       </div>
 
-      <div style="display: flex; gap: 16px; margin-bottom: 18px;">
-        <div class="modal-field" style="flex: 1; margin-bottom: 0;">
+      <div class="modal-row">
+        <div class="modal-field">
           <label>Category</label>
           <select id="post-category">
-            <option value="Filipino Classics">Filipino Classics</option>
-            <option value="Healthy">Healthy</option>
-            <option value="Desserts">Desserts</option>
+            <option value="Filipino Classics">🍲 Filipino Classics</option>
+            <option value="Modern Filipino">🍽️ Modern Filipino</option>
+            <option value="Healthy">🥗 Healthy</option>
+            <option value="Desserts">🍮 Desserts</option>
+            <option value="Street Food">🍢 Street Food</option>
+            <option value="Drinks">🥤 Drinks</option>
           </select>
         </div>
-        <div class="modal-field" style="flex: 1; margin-bottom: 0;">
+        <div class="modal-field">
           <label>Base Servings</label>
-          <input type="number" id="post-servings" placeholder="e.g. 4" min="1" value="1">
+          <input type="number" id="post-servings" placeholder="4" min="1" value="1"/>
         </div>
-        <div class="modal-field" style="flex: 1; margin-bottom: 0;">
-          <label>Price (Points)</label>
-          <input type="number" id="post-price" placeholder="0 = Free" min="0" value="0">
+        <div class="modal-field">
+          <label>Cook Time</label>
+          <input type="text" placeholder="e.g. 45 min"/>
         </div>
       </div>
 
+      <!-- Points pricing selector -->
+      <div class="points-cost-selector">
+        <span class="points-cost-label">🏅 Points Required to Unlock</span>
+        <div class="points-tiers">
+          <button class="tier-btn selected" onclick="selectTier(this, 0)">
+            <span class="tier-pts">Free</span>
+            <span class="tier-label">Open to all</span>
+          </button>
+          <button class="tier-btn" onclick="selectTier(this, 20)">
+            <span class="tier-pts">20 pts</span>
+            <span class="tier-label">Basic</span>
+          </button>
+          <button class="tier-btn" onclick="selectTier(this, 50)">
+            <span class="tier-pts">50 pts</span>
+            <span class="tier-label">Premium</span>
+          </button>
+          <button class="tier-btn" onclick="selectTier(this, 100)">
+            <span class="tier-pts">100 pts</span>
+            <span class="tier-label">Exclusive</span>
+          </button>
+        </div>
+        <!-- Hidden input that submitPost() reads -->
+        <input type="number" id="post-price" value="0" style="display:none;"/>
+      </div>
+
+      <!-- Ingredients -->
       <div class="modal-field">
         <label>Ingredients</label>
         <div id="ingredients-container"></div>
-        <button type="button" class="btn-sm" style="margin-top:10px; border-style:dashed; width:100%;" onclick="addIngredientRow()">+ Add Ingredient</button>
+        <button type="button" class="btn-sm" style="margin-top:10px; border-style:dashed; width:100%; font-size:13px;" onclick="addIngredientRow()">
+          + Add Ingredient
+        </button>
       </div>
 
-      <button class="btn-post" style="width:100%; padding:14px; margin-top: 10px;" onclick="submitPost()">🚀 Publish Recipe</button>
+      <button class="btn-publish" onclick="submitPost()">
+        🚀 Publish Recipe
+      </button>
     </div>
   </div>
 
+
+  <!-- ═══════════════════════════════════════════════════════
+       EDIT PROFILE MODAL
+  ═══════════════════════════════════════════════════════ -->
   <div class="modal-backdrop" id="editProfileModal">
-    <div class="modal">
+    <div class="modal" style="max-width:420px;">
       <div class="modal-header">
         <div class="modal-title">Edit Profile 👤</div>
         <button class="modal-close" onclick="closeEditProfile()">✕</button>
       </div>
-      <div class="modal-field"><label>Display Name</label><input type="text" id="edit-name"></div>
-      <button class="btn-post" style="width:100%; padding:14px;" onclick="submitProfileUpdate()">💾 Save</button>
+      <div class="modal-field">
+        <label>Display Name</label>
+        <input type="text" id="edit-name" placeholder="Your display name"/>
+      </div>
+      <div class="modal-field">
+        <label>Bio</label>
+        <textarea rows="2" placeholder="Tell the community about yourself..."></textarea>
+      </div>
+      <button class="btn-publish" onclick="submitProfileUpdate()">💾 Save Profile</button>
     </div>
   </div>
 
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       JAVASCRIPT — ALL ORIGINAL LOGIC PRESERVED
+  ═══════════════════════════════════════════════════════ -->
   <script>
     const API_BASE = 'http://localhost:8080/api';
 
+    // ── Init ─────────────────────────────────────────────
     window.onload = () => {
       const token = localStorage.getItem('jwt');
       if (token) routeUser(); else toggleAuth('login');
+
+      // Set date in topbar
+      const dateStr = new Date().toLocaleDateString('en-PH', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+      const el1 = document.getElementById('topbar-date');
+      const el2 = document.getElementById('admin-date-display');
+      if (el1) el1.textContent = dateStr;
+      if (el2) el2.textContent = dateStr;
     };
 
+    // ── Toast helper ─────────────────────────────────────
+    function showToast(msg, duration = 3200) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), duration);
+    }
+
+    // ── Auth routing ─────────────────────────────────────
     function toggleAuth(type) {
       document.getElementById('dashboard-wrapper').classList.add('hidden');
       document.getElementById('admin-wrapper').classList.add('hidden');
@@ -355,12 +2441,11 @@
     function routeUser() {
       const role = localStorage.getItem('mep_role');
       document.getElementById('auth-wrapper').classList.add('hidden');
-      
       if (role === 'admin') {
         document.getElementById('dashboard-wrapper').classList.add('hidden');
         document.getElementById('admin-wrapper').classList.remove('hidden');
         loadAdminData();
-        loadAdminTransactions(); 
+        loadAdminTransactions();
       } else {
         document.getElementById('admin-wrapper').classList.add('hidden');
         document.getElementById('dashboard-wrapper').classList.remove('hidden');
@@ -375,48 +2460,73 @@
       toggleAuth('login');
     }
 
+    // ── Register ─────────────────────────────────────────
     async function registerUser() {
       const email = document.getElementById('reg-email').value;
       const password = document.getElementById('reg-password').value;
       try {
         const res = await fetch(`${API_BASE}/auth/register.php`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password })
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
         });
-        if (res.ok) { alert('Success! Please log in.'); toggleAuth('login'); } 
-        else { const data = await res.json(); alert('Error: ' + data.error); }
-      } catch (e) { alert('Server failed.'); }
+        if (res.ok) {
+          showToast('🎉 Account created! Please log in.');
+          toggleAuth('login');
+        } else {
+          const data = await res.json();
+          showToast('❌ ' + data.error);
+        }
+      } catch (e) {
+        showToast('🔌 Server connection failed.');
+      }
     }
 
+    // ── Login ─────────────────────────────────────────────
     async function loginUser() {
       const email = document.getElementById('login-email').value;
       const password = document.getElementById('login-password').value;
       try {
         const res = await fetch(`${API_BASE}/auth/login.php`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password })
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
         });
         const data = await res.json();
         if (res.ok) {
           localStorage.setItem('jwt', data.token);
-          localStorage.setItem('mep_role', data.role || 'user'); 
+          localStorage.setItem('mep_role', data.role || 'user');
           routeUser();
-        } else { alert('Error: ' + data.error); }
-      } catch (e) { alert('Server failed.'); }
+        } else {
+          showToast('❌ ' + data.error);
+        }
+      } catch (e) {
+        showToast('🔌 Server connection failed.');
+      }
     }
 
+    // ── Admin: load users ─────────────────────────────────
     async function loadAdminData() {
       const token = localStorage.getItem('jwt');
       const tableBody = document.getElementById('admin-user-table');
       try {
-        const res = await fetch(`${API_BASE}/auth/admin_get_users.php`, { headers: { 'Authorization': `Bearer ${token}` } });
+        const res = await fetch(`${API_BASE}/auth/admin_get_users.php`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
         const data = await res.json();
         if (res.ok) {
           document.getElementById('admin-total-users').innerText = data.data.length;
           tableBody.innerHTML = '';
           data.data.forEach(user => {
-            const badgeClass = user.role === 'admin' ? 'badge-admin' : 'badge-user';
+            const badgeClass = user.role === 'admin' ? 'badge-admin' : user.role === 'chef' ? 'badge-chef' : 'badge-user';
             tableBody.innerHTML += `
               <tr>
-                <td>${user.email}</td>
+                <td>
+                  <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="width:30px; height:30px; border-radius:8px; background:linear-gradient(135deg,var(--clay),var(--amber)); display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0;">👤</div>
+                    <span>${user.email}</span>
+                  </div>
+                </td>
                 <td><span class="badge ${badgeClass}">${user.role.toUpperCase()}</span></td>
                 <td>${new Date(user.created_at).toLocaleDateString()}</td>
               </tr>
@@ -426,22 +2536,26 @@
       } catch(e) {}
     }
 
+    // ── Admin: transactions ───────────────────────────────
     async function loadAdminTransactions() {
       const token = localStorage.getItem('jwt');
       const list = document.getElementById('admin-transactions-list');
       try {
-        const res = await fetch(`${API_BASE}/profile/admin_get_transactions.php`, { headers: { 'Authorization': `Bearer ${token}` } });
+        const res = await fetch(`${API_BASE}/profile/admin_get_transactions.php`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
         const data = await res.json();
         if (res.ok) {
           document.getElementById('admin-total-revenue').innerText = '₱ ' + Number(data.totals.revenue || 0).toLocaleString();
           document.getElementById('admin-total-points').innerText = Number(data.totals.points || 0).toLocaleString();
-          
-          list.innerHTML = '';
-          if(data.data.length === 0) list.innerHTML = '<p style="color:var(--muted); font-size:12px; padding: 20px 0;">No transactions yet.</p>';
 
+          list.innerHTML = '';
+          if (data.data.length === 0) {
+            list.innerHTML = '<div style="text-align:center; padding:24px 0; color:var(--muted); font-size:12px;">No transactions yet.</div>';
+          }
           data.data.forEach(tx => {
             list.innerHTML += `
-              <div style="display:flex; justify-content:space-between; padding: 14px 0; border-bottom: 1px solid var(--border);">
+              <div class="tx-item">
                 <div>
                   <div style="font-size:13px; font-weight:500; color:var(--dark);">${tx.buyer_name}</div>
                   <div style="font-size:11px; color:var(--muted); margin-top:2px;">${new Date(tx.created_at).toLocaleString()}</div>
@@ -457,105 +2571,197 @@
       } catch(e) {}
     }
 
+    // ── Profile data ─────────────────────────────────────
     async function loadProfileData() {
       const token = localStorage.getItem('jwt');
       try {
-        const res = await fetch(`${API_BASE}/profile/dashboard.php`, { headers: { 'Authorization': `Bearer ${token}` }});
+        const res = await fetch(`${API_BASE}/profile/dashboard.php`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
         if (res.ok) {
           const data = await res.json();
-          document.getElementById('sidebar-name').innerText = data.data.display_name;
-          document.getElementById('topbar-name').innerText = data.data.display_name;
-          document.getElementById('wallet-balance').innerHTML = `${data.data.points_balance || 0} <span style="font-size:12px; color:rgba(250,243,232,0.4);">pts</span>`;
+          const name = data.data.display_name;
+          const pts  = data.data.points_balance || 0;
+
+          document.getElementById('sidebar-name').innerText = name;
+          document.getElementById('topbar-name').innerText   = name.split(' ')[0];
+
+          // Wallet display
+          document.getElementById('wallet-balance').innerHTML =
+            `${Number(pts).toLocaleString()} <span class="wallet-pts-label">pts</span>`;
+
+          // Points widget
+          const ptsWidget = document.querySelector('.points-big');
+          if (ptsWidget) ptsWidget.textContent = Number(pts).toLocaleString();
+
+          // Progress bar (out of 2000 for Gold)
+          const pct = Math.min((pts / 2000) * 100, 100);
+          const fill = document.querySelector('.points-bar-inner');
+          if (fill) fill.style.width = pct + '%';
+          const wfill = document.getElementById('wallet-fill');
+          if (wfill) wfill.style.width = pct + '%';
         }
       } catch (e) {}
     }
 
+    // ── Load feed ─────────────────────────────────────────
     async function loadFeed() {
       const token = localStorage.getItem('jwt');
       const feedContainer = document.getElementById('recipe-feed');
-      feedContainer.innerHTML = '<p style="color: var(--muted);">Loading recipes...</p>';
+
+      // Skeleton
+      feedContainer.innerHTML = `
+        <div style="background:var(--card); border-radius:var(--radius-lg); border:1px solid var(--border); overflow:hidden; margin-bottom:20px;">
+          <div style="height:180px; background: linear-gradient(90deg, var(--bg) 25%, var(--bg-deep) 50%, var(--bg) 75%); background-size:200% 100%; animation: shimmer 1.8s infinite;"></div>
+          <div style="padding:20px 22px;">
+            <div style="height:11px; background:var(--bg); border-radius:6px; margin-bottom:10px; width:28%; animation: shimmer 1.8s infinite; background-size:200% 100%;"></div>
+            <div style="height:20px; background:var(--bg); border-radius:6px; margin-bottom:8px; width:65%; animation: shimmer 1.8s infinite; background-size:200% 100%;"></div>
+            <div style="height:13px; background:var(--bg); border-radius:6px; width:88%; animation: shimmer 1.8s infinite; background-size:200% 100%;"></div>
+          </div>
+        </div>
+      `;
 
       try {
-        const res = await fetch(`${API_BASE}/posts/get_posts.php`, { headers: { 'Authorization': `Bearer ${token}` }});
+        const res = await fetch(`${API_BASE}/posts/get_posts.php`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
         const data = await res.json();
-        
+
         if (res.ok && data.data.length > 0) {
-          feedContainer.innerHTML = ''; 
-          data.data.forEach(post => {
-            
+          feedContainer.innerHTML = '';
+
+          // Category → emoji mapping for photo banners
+          const categoryEmoji = {
+            'Filipino Classics': '🍲', 'Modern Filipino': '🍽️',
+            'Healthy': '🥗', 'Desserts': '🍮',
+            'Street Food': '🍢', 'Drinks': '🥤', 'default': '🍳'
+          };
+
+          // Category → gradient mapping
+          const categoryGrad = {
+            'Filipino Classics': 'linear-gradient(135deg,#C4713A,#E8A44A)',
+            'Modern Filipino':   'linear-gradient(135deg,#3D2314,#C4713A)',
+            'Healthy':           'linear-gradient(135deg,#4A5C3A,#7C8C6E)',
+            'Desserts':          'linear-gradient(135deg,#8B5A2B,#E8A44A)',
+            'Street Food':       'linear-gradient(135deg,#C4713A,#8B5A2B)',
+            'Drinks':            'linear-gradient(135deg,#2A4A5A,#3D7A8A)',
+            'default':           'linear-gradient(135deg,#C4713A,#E8A44A)'
+          };
+
+          data.data.forEach((post, idx) => {
+            const emoji = categoryEmoji[post.category] || categoryEmoji['default'];
+            const grad  = categoryGrad[post.category]  || categoryGrad['default'];
+
             let ingredientsHTML = '';
-            
+
             if (post.locked) {
               ingredientsHTML = `
-                <div style="margin: 12px 0; padding: 24px 16px; background: rgba(26,17,10,0.04); border-radius: 12px; border: 1px dashed rgba(26,17,10,0.2); text-align: center;">
-                  <div style="font-size: 24px; margin-bottom: 8px;">🔒</div>
-                  <div style="font-size: 14px; font-weight: 500; color: var(--dark); margin-bottom: 4px;">Premium Recipe</div>
-                  <div style="font-size: 12px; color: var(--muted); margin-bottom: 16px;">Unlock the ingredients and scaling engine to cook this dish.</div>
-                  <button class="btn-sm" style="background: var(--amber); border: none; color: var(--dark); font-weight: 700; width: 100%;" onclick="unlockRecipe(${post.id}, ${post.points_cost})">
-                    Unlock for ${post.points_cost} pts
+                <div class="locked-overlay">
+                  <div class="locked-icon">🔒</div>
+                  <div class="locked-title">Premium Recipe</div>
+                  <div class="locked-sub">Unlock the full ingredient list and smart scaling engine to cook this dish.</div>
+                  <button class="unlock-btn" onclick="unlockRecipe(${post.id}, ${post.points_cost})">
+                    🏅 Unlock for ${post.points_cost} pts
                   </button>
                 </div>
               `;
             } else {
               try {
-                const parsedData = typeof post.recipe_data === 'string' ? JSON.parse(post.recipe_data) : (post.recipe_data || {});
-                const ingredientsList = Array.isArray(parsedData) ? parsedData : (parsedData.ingredients || []);
+                const parsedData = typeof post.recipe_data === 'string'
+                  ? JSON.parse(post.recipe_data)
+                  : (post.recipe_data || {});
+                const ingredientsList = Array.isArray(parsedData)
+                  ? parsedData
+                  : (parsedData.ingredients || []);
                 const baseServings = parsedData.base_servings || 1;
-                
+
                 if (ingredientsList.length > 0) {
-                  ingredientsHTML = '<div style="margin: 12px 0; padding: 16px; background: rgba(196,113,58,0.04); border-radius: 12px; border: 1px dashed rgba(196,113,58,0.3);">';
-                  
-                  // Interactive Serving Counter UI
-                  ingredientsHTML += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
-                      <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--clay); letter-spacing: 0.5px;">🛒 Ingredients</span>
-                      
-                      <div style="display:flex; align-items:center; gap:8px; background:var(--white); padding:2px 4px; border-radius:8px; border:1px solid var(--border);">
-                        <button onclick="scaleRecipe(this, -1)" style="border:none; background:transparent; cursor:pointer; font-size:14px; font-weight:bold; color:var(--dark); padding: 0 6px;">-</button>
-                        <span class="serving-display" data-base="${baseServings}" data-current="${baseServings}" style="font-size:11px; font-weight:500; min-width:65px; text-align:center;">${baseServings} Servings</span>
-                        <button onclick="scaleRecipe(this, 1)" style="border:none; background:transparent; cursor:pointer; font-size:14px; font-weight:bold; color:var(--dark); padding: 0 6px;">+</button>
+                  ingredientsHTML = `
+                    <div style="margin: 14px 0; padding: 16px; background: rgba(196,113,58,0.04); border-radius: 14px; border: 1.5px dashed rgba(196,113,58,0.25);">
+                      <div class="scaler-bar">
+                        <span class="scaler-label">🛒 Ingredients</span>
+                        <div class="scaler-control">
+                          <button class="scale-btn" onclick="scaleRecipe(this, -1)">−</button>
+                          <span class="serving-display" data-base="${baseServings}" data-current="${baseServings}">${baseServings} Serving${baseServings !== 1 ? 's' : ''}</span>
+                          <button class="scale-btn" onclick="scaleRecipe(this, 1)">+</button>
+                        </div>
                       </div>
-                    </div>`;
-                  
-                  ingredientsHTML += '<ul style="list-style: none; padding: 0; margin: 0; font-size: 13px; color: var(--dark); display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">';
-                  
+                      <ul class="ingredient-grid">
+                  `;
+
                   ingredientsList.forEach(ing => {
-                    ingredientsHTML += `<li>• <strong style="color:var(--bark);"><span class="ing-val" data-base-amt="${ing.amount}">${ing.amount}</span> ${ing.unit}</strong> ${ing.ingredient}</li>`;
+                    ingredientsHTML += `
+                      <li>
+                        <strong><span class="ing-val" data-base-amt="${ing.amount}">${ing.amount}</span>
+                        <span class="ing-unit-label"> ${ing.unit}</span></strong>
+                        &nbsp;${ing.ingredient}
+                      </li>
+                    `;
                   });
-                  
+
                   ingredientsHTML += '</ul></div>';
                 }
-              } catch(e) { console.error("Error parsing ingredients for post ID: " + post.id); }
+              } catch(e) {
+                console.error('Error parsing ingredients for post ID: ' + post.id);
+              }
             }
 
             feedContainer.innerHTML += `
-              <div class="recipe-card">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                  <span class="recipe-tag">${post.category}</span>
-                  <span style="color:var(--muted); font-size:12px;">❤️ ${post.likes_count || 0}</span>
+              <div class="recipe-card" style="animation-delay:${idx * 0.06}s">
+                <!-- Photo / banner area -->
+                <div class="recipe-photo" style="background: ${grad};">
+                  <div class="recipe-photo-emoji">${emoji}</div>
+                  <div class="photo-upload-hint">📷 Add photo</div>
+                  <div class="recipe-photo-labels">
+                    <span class="recipe-tag">${post.category}</span>
+                    ${post.locked ? `<span class="recipe-lock-tag">🔒 ${post.points_cost} pts</span>` : ''}
+                  </div>
                 </div>
-                <div class="recipe-title" style="margin-top:12px;">${post.title}</div>
-                <div class="recipe-desc">${post.description}</div>
-                
-                ${ingredientsHTML}
-                
-                <div style="margin-top: 14px; font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 8px;">
-                  <div style="width: 24px; height: 24px; border-radius: 6px; background: var(--amber); display: flex; align-items: center; justify-content: center; font-size: 10px; color: white;">👨‍🍳</div>
-                  by <strong style="color:var(--dark);">${post.author_name}</strong>
+
+                <!-- Card body -->
+                <div class="recipe-body">
+                  <div class="recipe-title">${post.title}</div>
+                  <div class="recipe-desc">${post.description}</div>
+
+                  <div class="recipe-author-row">
+                    <div class="author-chip">👨‍🍳</div>
+                    <div class="author-name">by <strong>${post.author_name}</strong></div>
+                    <div class="recipe-likes">
+                      <button class="like-btn">❤️ ${post.likes_count || 0}</button>
+                      <button class="like-btn">💬 Reply</button>
+                      <button class="like-btn">🔖 Save</button>
+                    </div>
+                  </div>
+
+                  ${ingredientsHTML}
                 </div>
-              </div>`;
+              </div>
+            `;
           });
+
         } else {
-          feedContainer.innerHTML = '<p style="color: var(--muted);">No recipes yet. Be the first to share!</p>';
+          feedContainer.innerHTML = `
+            <div style="text-align:center; padding:48px 0; color:var(--muted);">
+              <div style="font-size:48px; margin-bottom:12px;">🍳</div>
+              <div style="font-family:'Playfair Display',serif; font-size:20px; color:var(--dark); margin-bottom:8px;">No recipes yet</div>
+              <div style="font-size:14px;">Be the first to share something delicious!</div>
+            </div>
+          `;
         }
-      } catch (e) { 
-        feedContainer.innerHTML = '<p style="color: var(--error);">Failed to load feed.</p>'; 
+      } catch (e) {
+        feedContainer.innerHTML = `
+          <div style="text-align:center; padding:40px 0; color:var(--error);">
+            <div style="font-size:32px; margin-bottom:10px;">⚡</div>
+            <div style="font-size:14px;">Failed to load feed. Check your connection.</div>
+          </div>
+        `;
       }
     }
 
+    // ── Unlock recipe ─────────────────────────────────────
     async function unlockRecipe(postId, cost) {
       const token = localStorage.getItem('jwt');
-      if(!confirm(`Are you sure you want to spend ${cost} points to unlock this recipe?`)) return;
+      if (!confirm(`Are you sure you want to spend ${cost} points to unlock this recipe?`)) return;
 
       try {
         const spendRes = await fetch(`${API_BASE}/profile/spend_points.php`, {
@@ -563,10 +2769,10 @@
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
           body: JSON.stringify({ points: cost })
         });
-        
+
         if (!spendRes.ok) {
           const spendData = await spendRes.json();
-          alert('Transaction Failed: ' + spendData.error);
+          showToast('❌ ' + spendData.error);
           return;
         }
 
@@ -577,19 +2783,22 @@
         });
 
         if (unlockRes.ok) {
-          alert('Success! Recipe unlocked.');
-          loadProfileData(); 
-          loadFeed(); 
+          showToast('🎉 Recipe unlocked successfully!');
+          loadProfileData();
+          loadFeed();
         } else {
-          alert('Error: Points deducted, but failed to unlock ledger.');
+          showToast('⚠️ Points deducted but failed to unlock. Contact support.');
         }
-      } catch(e) { alert('Network connection failed during checkout.'); }
+      } catch(e) {
+        showToast('🔌 Network error during checkout.');
+      }
     }
 
+    // ── Buy points ────────────────────────────────────────
     async function buyPoints(points, price) {
       const token = localStorage.getItem('jwt');
       const buyerName = document.getElementById('sidebar-name').innerText;
-      if(!confirm(`Are you sure you want to purchase ${points} points for ₱${price}?`)) return;
+      if (!confirm(`Purchase ${points} points for ₱${price}?`)) return;
 
       try {
         const res = await fetch(`${API_BASE}/profile/buy_points.php`, {
@@ -597,52 +2806,114 @@
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
           body: JSON.stringify({ points: points, php_amount: price, buyer_name: buyerName })
         });
-        if(res.ok) {
-          alert(`Successfully purchased ${points} points!`);
-          loadProfileData(); 
-        } else { alert('Transaction failed.'); }
-      } catch(e) { alert('Network connection failed.'); }
+        if (res.ok) {
+          showToast(`✅ Purchased ${points} points!`);
+          loadProfileData();
+        } else {
+          showToast('❌ Transaction failed. Try again.');
+        }
+      } catch(e) {
+        showToast('🔌 Network connection failed.');
+      }
     }
 
+    // ── Ingredient rows ───────────────────────────────────
     function addIngredientRow() {
       const container = document.getElementById('ingredients-container');
       const row = document.createElement('div');
-      row.style.display = 'flex';
-      row.style.gap = '8px';
-      row.style.marginBottom = '8px';
+      row.className = 'ingredient-row';
       row.innerHTML = `
         <input type="text" class="ing-name" placeholder="e.g. Garlic" style="flex:2;">
         <input type="number" class="ing-amt" placeholder="Qty" style="flex:1;">
-        <select class="ing-unit" style="flex:1;">
+        <select class="ing-unit" style="flex:1.2;">
           <option value="pcs">pcs</option>
           <option value="tbsp">tbsp</option>
           <option value="tsp">tsp</option>
           <option value="cup">cup</option>
           <option value="g">grams</option>
+          <option value="kg">kg</option>
           <option value="ml">ml</option>
+          <option value="L">liters</option>
         </select>
-        <button type="button" style="padding:0 12px; border-radius:8px; border:1px solid var(--error); background:transparent; color:var(--error); cursor:pointer;" onclick="this.parentElement.remove()">✕</button>
+        <button type="button" class="del-ingredient-btn" onclick="this.parentElement.remove()">✕</button>
       `;
       container.appendChild(row);
     }
 
-    function openModal() { 
-      document.getElementById('recipeModal').classList.add('open'); 
-      document.getElementById('ingredients-container').innerHTML = '';
-      addIngredientRow(); 
+    // ── Modals ────────────────────────────────────────────
+    function openModal() {
+      document.getElementById('recipeModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      const container = document.getElementById('ingredients-container');
+      container.innerHTML = '';
+      addIngredientRow();
+      // Reset tier selection
+      document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('selected'));
+      document.querySelector('.tier-btn').classList.add('selected');
+      document.getElementById('post-price').value = '0';
+      document.getElementById('upload-preview').innerHTML = '';
     }
-    
-    function closeModal() { 
-      document.getElementById('recipeModal').classList.remove('open'); 
+
+    function closeModal() {
+      document.getElementById('recipeModal').classList.remove('open');
+      document.body.style.overflow = '';
       document.getElementById('post-title').value = '';
       document.getElementById('post-desc').value = '';
       document.getElementById('post-price').value = '0';
       document.getElementById('post-servings').value = '1';
     }
 
-    function openEditProfile() { document.getElementById('editProfileModal').classList.add('open'); document.getElementById('edit-name').value = document.getElementById('sidebar-name').innerText; }
-    function closeEditProfile() { document.getElementById('editProfileModal').classList.remove('open'); }
+    function openEditProfile() {
+      document.getElementById('editProfileModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      document.getElementById('edit-name').value = document.getElementById('sidebar-name').innerText;
+    }
 
+    function closeEditProfile() {
+      document.getElementById('editProfileModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    // Close modals on backdrop click
+    document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+      backdrop.addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      });
+    });
+
+    // ── Points tier selector ──────────────────────────────
+    function selectTier(btn, value) {
+      document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('post-price').value = value;
+    }
+
+    // ── Photo preview ─────────────────────────────────────
+    function handlePhotoPreview(input) {
+      const preview = document.getElementById('upload-preview');
+      preview.innerHTML = '';
+      Array.from(input.files).slice(0, 5).forEach((file, i) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'upload-preview-thumb';
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = e => {
+            thumb.style.background = 'none';
+            thumb.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:8px;">`;
+            if (i === 0) thumb.innerHTML += `<div style="position:absolute; top:2px; left:2px; font-size:9px; background:var(--clay); color:white; border-radius:3px; padding:1px 4px;">Cover</div>`;
+          };
+          reader.readAsDataURL(file);
+        } else {
+          thumb.innerHTML = '🎥';
+        }
+        preview.appendChild(thumb);
+      });
+    }
+
+    // ── Submit post ───────────────────────────────────────
     async function submitPost() {
       const token = localStorage.getItem('jwt');
       const title = document.getElementById('post-title').value;
@@ -651,67 +2922,103 @@
       const authorName = document.getElementById('sidebar-name').innerText;
       const price = parseInt(document.getElementById('post-price').value) || 0;
       const servings = parseInt(document.getElementById('post-servings').value) || 1;
-      
-      if (!title || !desc) { alert("Title and description are required."); return; }
+
+      if (!title || !desc) {
+        showToast('⚠️ Title and description are required.');
+        return;
+      }
 
       const ingredientRows = document.querySelectorAll('#ingredients-container > div');
       const recipeDataArray = [];
       ingredientRows.forEach(row => {
         const name = row.querySelector('.ing-name').value.trim();
-        const amt = row.querySelector('.ing-amt').value;
+        const amt  = row.querySelector('.ing-amt').value;
         const unit = row.querySelector('.ing-unit').value;
-        if (name) { recipeDataArray.push({ ingredient: name, amount: parseFloat(amt) || 0, unit: unit }); }
+        if (name) {
+          recipeDataArray.push({ ingredient: name, amount: parseFloat(amt) || 0, unit: unit });
+        }
       });
 
       const advancedRecipeData = { base_servings: servings, ingredients: recipeDataArray };
 
       try {
-        const res = await fetch(`${API_BASE}/posts/create_post.php`, { 
-          method: 'POST', 
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, 
-          body: JSON.stringify({ 
-            title: title, description: desc, category: category, author_name: authorName, points_cost: price, recipe_data: advancedRecipeData
-          }) 
+        const res = await fetch(`${API_BASE}/posts/create_post.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({
+            title: title,
+            description: desc,
+            category: category,
+            author_name: authorName,
+            points_cost: price,
+            recipe_data: advancedRecipeData
+          })
         });
-        if (res.ok) { closeModal(); loadFeed(); } else { const data = await res.json(); alert('Error: ' + data.error); }
-      } catch (e) { alert('Failed to publish recipe.'); }
+        if (res.ok) {
+          closeModal();
+          showToast('🚀 Recipe published! +50 points earned.');
+          loadFeed();
+          loadProfileData();
+        } else {
+          const data = await res.json();
+          showToast('❌ ' + data.error);
+        }
+      } catch (e) {
+        showToast('🔌 Failed to publish recipe.');
+      }
     }
 
+    // ── Profile update ────────────────────────────────────
     async function submitProfileUpdate() {
       const token = localStorage.getItem('jwt');
       const newName = document.getElementById('edit-name').value;
       if (!newName) return;
       try {
-        const res = await fetch(`${API_BASE}/profile/update_profile.php`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ display_name: newName }) });
-        if (res.ok) { closeEditProfile(); loadProfileData(); }
+        const res = await fetch(`${API_BASE}/profile/update_profile.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ display_name: newName })
+        });
+        if (res.ok) {
+          closeEditProfile();
+          showToast('✅ Profile updated!');
+          loadProfileData();
+        }
       } catch (e) {}
     }
 
-    // --- Dynamic Ingredient Scaler Engine ---
+    // ── Smart Ingredient Scaler Engine ────────────────────
     function scaleRecipe(btnElement, delta) {
       const counterWrapper = btnElement.parentElement;
       const displaySpan = counterWrapper.querySelector('.serving-display');
       const recipeCard = counterWrapper.closest('.recipe-card');
       const amountSpans = recipeCard.querySelectorAll('.ing-val');
-      
-      const baseServings = parseInt(displaySpan.getAttribute('data-base'));
-      let currentServings = parseInt(displaySpan.getAttribute('data-current'));
-      
+
+      const baseServings    = parseInt(displaySpan.getAttribute('data-base'));
+      let   currentServings = parseInt(displaySpan.getAttribute('data-current'));
+
       let newServings = currentServings + delta;
       if (newServings < 1) newServings = 1;
-      
+
       displaySpan.setAttribute('data-current', newServings);
       displaySpan.innerText = newServings + (newServings === 1 ? ' Serving' : ' Servings');
-      
+
       const scalingRatio = newServings / baseServings;
-      
+
       amountSpans.forEach(span => {
         const baseAmt = parseFloat(span.getAttribute('data-base-amt'));
-        let newAmt = baseAmt * scalingRatio;
-        newAmt = Number((newAmt).toFixed(2));
+        let newAmt = Number((baseAmt * scalingRatio).toFixed(2));
         span.innerText = newAmt;
       });
     }
+
+    // ── Escape key closes modals ──────────────────────────
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-backdrop.open').forEach(m => m.classList.remove('open'));
+        document.body.style.overflow = '';
+      }
+    });
   </script>
 </body>
 </html>
