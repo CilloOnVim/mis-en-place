@@ -23,17 +23,22 @@ $current_user_id = $payload['user_id'];
 
 try {
     // 2. Fetch posts AND check the ledger simultaneously
+
+    // 2. Fetch posts, check paywall ledger, AND check likes ledger simultaneously
     $query = "
         SELECT p.id, p.user_id, p.author_name, p.title, p.description, p.category, 
-               p.points_cost, p.recipe_data, p.likes_count, p.created_at,
-               IF(u.id IS NOT NULL, 1, 0) as is_unlocked
+               p.points_cost, p.recipe_data, p.image_url, p.likes_count, p.created_at,
+               IF(u.id IS NOT NULL, 1, 0) as is_unlocked,
+               IF(l.user_id IS NOT NULL, 1, 0) as has_liked
         FROM posts p
         LEFT JOIN unlocked_recipes u ON p.id = u.post_id AND u.user_id = ?
+        LEFT JOIN post_likes l ON p.id = l.post_id AND l.user_id = ?
         ORDER BY p.created_at DESC
     ";
     
     $stmt = $pdo->prepare($query);
-    $stmt->execute([$current_user_id]);
+    // We pass $current_user_id twice: once for the unlocked_recipes JOIN, once for the post_likes JOIN
+    $stmt->execute([$current_user_id, $current_user_id]);
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
     // 3. Enforce the Paywall

@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     role ENUM('user', 'admin') DEFAULT 'user', -- New role column
+    reset_token VARCHAR(255) NULL,       -- NEW: Stores the temporary key
+    reset_expires DATETIME NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -56,8 +58,16 @@ CREATE TABLE IF NOT EXISTS posts (
     category VARCHAR(100),
     points_cost INT DEFAULT 0,
     recipe_data JSON,
+    image_url VARCHAR(255) NULL,   -- NEW: Tracks the uploaded photo
     likes_count INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS post_likes (
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, post_id)
 );
 
 -- NEW: The Paywall Ledger
@@ -69,3 +79,15 @@ CREATE TABLE IF NOT EXISTS unlocked_recipes (
     unlocked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY unique_unlock (user_id, post_id) -- Prevents duplicate purchases
 );
+
+CREATE TABLE IF NOT EXISTS comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT NOT NULL,
+    user_id INT NOT NULL,
+    author_name VARCHAR(255) NOT NULL,
+    comment_text TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX(post_id)
+);
+
+

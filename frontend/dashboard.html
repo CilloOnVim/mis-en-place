@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mise en Place — Dashboard</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+
+<body>
+
+  <div id="dashboard-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="logo-icon">🍳</div>
+        <div>
+          <div class="brand-name">Mise <em>en Place</em></div>
+          <div class="brand-tagline">Community Kitchen</div>
+        </div>
+      </div>
+      <div class="sidebar-user">
+        <div class="user-avatar">🧑‍🍳<div class="online-dot"></div>
+        </div>
+        <div class="user-info">
+          <div class="user-name" id="sidebar-name">Loading...</div>
+          <div style="font-size:11px; color:var(--amber); margin-top:2px;">Home Cook &nbsp;·&nbsp; <span
+              onclick="openEditProfile()"
+              style="cursor:pointer; color:rgba(250,243,232,0.5); text-decoration:underline; font-size:10px;">Edit</span>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-wallet">
+        <div class="wallet-label">🏅 Digital Wallet</div>
+        <div id="wallet-balance">0 <span class="wallet-pts-label">pts</span></div>
+        <div class="wallet-progress">
+          <div class="wallet-progress-fill" id="wallet-fill"></div>
+        </div>
+        <div class="wallet-hint">Post recipes or purchase to earn more points</div><button class="buy-btn buy-btn-basic"
+          onclick="buyPoints(500, 500)"><span>500 points</span><span><strong>₱500</strong></span></button><button
+          class="buy-btn buy-btn-featured" onclick="buyPoints(1200, 1000)"><span>1,200 points <span
+              class="buy-badge">BEST</span></span><span><strong>₱1,000</strong></span></button>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Discover</div><button class="nav-item active"><span class="nav-icon">🏠</span>
+          Community Feed</button><button class="nav-item"><span class="nav-icon">🔍</span> Explore
+          Recipes</button><button class="nav-item"><span class="nav-icon">📖</span> My Recipes</button><button
+          class="nav-item"><span class="nav-icon">🔖</span> Saved</button>
+        <div class="nav-section-label">Account</div><button class="nav-item"><span class="nav-icon">👤</span>
+          Profile</button><button class="nav-item"><span class="nav-icon">🔔</span> Notifications</button><button
+          class="nav-item"><span class="nav-icon">🛒</span> Marketplace</button>
+      </nav>
+      <div class="sidebar-footer"><button class="nav-item" onclick="logoutUser()"
+          style="color:rgba(255,100,100,0.6);"><span class="nav-icon">🚪</span> Sign Out</button></div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="greeting-text">Good day, <em id="topbar-name">Chef</em> 🌿</div>
+          <div class="topbar-date" id="topbar-date"></div>
+        </div>
+        <div class="topbar-actions">
+          <div class="topbar-search"><span style="font-size:14px; color:rgba(26,17,10,0.3);">🔍</span><input type="text"
+              placeholder="Search recipes, cooks..." /></div><button class="icon-btn"
+            title="Notifications">🔔</button><button class="btn-post" onclick="openModal()">+ Share Recipe</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="stats-row">
+          <div class="stat-pill"><span class="stat-pill-icon">📖</span>
+            <div>
+              <div class="stat-pill-value">0</div>
+              <div class="stat-pill-label">Recipes Shared</div>
+            </div>
+          </div>
+          <div class="stat-pill"><span class="stat-pill-icon">❤️</span>
+            <div>
+              <div class="stat-pill-value">0</div>
+              <div class="stat-pill-label">Total Likes</div>
+            </div>
+          </div>
+          <div class="stat-pill"><span class="stat-pill-icon">👥</span>
+            <div>
+              <div class="stat-pill-value">0</div>
+              <div class="stat-pill-label">Followers</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="main-grid">
+          <div class="feed-column">
+            <div class="create-post-bar" onclick="openModal()">
+              <div class="create-avatar">🧑‍🍳</div>
+              <div class="create-text">Share a recipe with the community...</div>
+              <div class="create-actions"><button class="create-action-btn">📸 Photo</button><button
+                  class="create-action-btn">🎥 Video</button></div>
+            </div>
+            <div class="section-header">
+              <h2 class="section-title">Community Feed</h2><span class="section-link">See trending →</span>
+            </div>
+            <div style="display: flex; gap: 10px; margin-bottom: 24px;">
+              <button id="tab-all" class="btn-sm"
+                style="background: var(--clay); color: white; border: none; padding: 8px 20px; border-radius: 20px; font-weight: 500; cursor: pointer;"
+                onclick="switchFeed('all')">🌍 Global Feed</button>
+              <button id="tab-saved" class="btn-sm"
+                style="background: transparent; color: var(--muted); border: 1.5px solid var(--border); padding: 8px 20px; border-radius: 20px; font-weight: 500; cursor: pointer;"
+                onclick="switchFeed('saved')">🔖 My Vault</button>
+            </div>
+            <div id="recipe-feed"></div>
+          </div>
+
+          <div class="right-col">
+            <div class="points-widget widget">
+              <div class="widget-title">🏅 Your Points</div>
+              <div class="points-hero">
+                <div class="points-big">0</div>
+                <div class="points-sublabel">Available Points</div>
+              </div>
+              <div class="points-bar-outer">
+                <div class="points-bar-inner" style="width:5%;"></div>
+              </div>
+              <div class="points-bar-labels"><span>Starter</span><span>Gold at 2,000 pts</span></div><button
+                class="btn-earn">✨ Earn More Points</button>
+            </div>
+            <div class="widget">
+              <div class="widget-title">🔥 Trending Today</div>
+              <div class="trend-list">
+                <div class="trend-item">
+                  <div class="trend-rank">#1</div>
+                  <div class="trend-emoji">🍲</div>
+                  <div class="trend-info">
+                    <div class="trend-name">Kare-Kare Nouveau</div>
+                    <div class="trend-count">2.4k views</div>
+                  </div>
+                  <div class="trend-pts">🏅 30</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="recipeModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Share a Recipe 🍳</div><button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="photo-upload-zone" onclick="document.getElementById('photo-input').click()"><input type="file"
+          id="photo-input" accept="image/*,video/*" multiple style="display:none;"
+          onchange="handlePhotoPreview(this)" />
+        <div class="upload-icon">📸</div>
+        <div class="upload-text">Drop your food photos or videos here</div>
+        <div class="upload-sub">PNG, JPG, MP4 — up to 50MB</div>
+        <div class="upload-preview" id="upload-preview"></div>
+      </div>
+      <div class="modal-field"><label>Recipe Title</label><input type="text" id="post-title"
+          placeholder="e.g. Lola's Sinigang sa Bayabas" /></div>
+      <div class="modal-field"><label>Description & Steps</label><textarea id="post-desc" rows="3"
+          placeholder="Tell the story behind this dish..."></textarea></div>
+      <div class="modal-row">
+        <div class="modal-field"><label>Category</label><select id="post-category">
+            <option value="Filipino Classics">🍲 Filipino Classics</option>
+            <option value="Modern Filipino">🍽️ Modern Filipino</option>
+            <option value="Healthy">🥗 Healthy</option>
+          </select></div>
+        <div class="modal-field"><label>Base Servings</label><input type="number" id="post-servings" placeholder="4"
+            min="1" value="1" /></div>
+        <div class="modal-field"><label>Cook Time</label><input type="text" placeholder="e.g. 45 min" /></div>
+      </div>
+      <div class="points-cost-selector"><span class="points-cost-label">🏅 Points Required to Unlock</span>
+        <div class="points-tiers"><button class="tier-btn selected" onclick="selectTier(this, 0)"><span
+              class="tier-pts">Free</span><span class="tier-label">Open</span></button><button class="tier-btn"
+            onclick="selectTier(this, 20)"><span class="tier-pts">20 pts</span><span
+              class="tier-label">Basic</span></button><button class="tier-btn" onclick="selectTier(this, 50)"><span
+              class="tier-pts">50 pts</span><span class="tier-label">Premium</span></button></div><input type="number"
+          id="post-price" value="0" style="display:none;" />
+      </div>
+      <div class="modal-field"><label>Ingredients</label>
+        <div id="ingredients-container"></div><button type="button" class="btn-sm"
+          style="margin-top:10px; border-style:dashed; width:100%;" onclick="addIngredientRow()">+ Add
+          Ingredient</button>
+      </div>
+      <button class="btn-publish" onclick="submitPost()">🚀 Publish Recipe</button>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="editProfileModal">
+    <div class="modal" style="max-width:420px;">
+      <div class="modal-header">
+        <div class="modal-title">Edit Profile 👤</div><button class="modal-close"
+          onclick="closeEditProfile()">✕</button>
+      </div>
+      <div class="modal-field"><label>Display Name</label><input type="text" id="edit-name"
+          placeholder="Your display name" /></div>
+      <div class="modal-field"><label>Bio</label><textarea rows="2"
+          placeholder="Tell the community about yourself..."></textarea></div><button class="btn-publish"
+        onclick="submitProfileUpdate()">💾 Save Profile</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+</body>
+
+</html>

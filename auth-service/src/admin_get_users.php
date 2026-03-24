@@ -51,7 +51,7 @@ if (!$admin_user || $admin_user['role'] !== 'admin') {
 }
 
 // Fetch all registered users for the monitoring table
-$stmt = $pdo->query("SELECT id, email, role, created_at FROM users ORDER BY created_at DESC");
+$stmt = $pdo->query("SELECT id, email, role, status, created_at FROM users ORDER BY created_at DESC");
 $users = $stmt->fetchAll();
 
 http_response_code(200);

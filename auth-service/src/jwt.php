@@ -13,4 +13,3 @@ function generate_jwt($payload) {
     
     return $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
 }
-?>

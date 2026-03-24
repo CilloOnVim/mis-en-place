@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mise en Place — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <div id="admin-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-brand"><div class="logo-icon">⚙️</div><div><div class="brand-name">Mise <em>en Place</em></div><div class="brand-tagline" style="color:rgba(255,200,150,0.4);">Admin Panel</div></div></div>
+      <div class="sidebar-user"><div class="user-avatar" style="background:rgba(255,255,255,0.15);">🛡️</div><div class="user-info"><div class="user-name">Administrator</div><div style="font-size:10px; color:rgba(255,200,150,0.6); margin-top:2px; letter-spacing:0.5px;">FULL ACCESS</div></div></div>
+      <nav class="sidebar-nav"><div class="nav-section-label">Overview</div><button class="nav-item active"><span class="nav-icon">📊</span> Dashboard</button><button class="nav-item"><span class="nav-icon">📈</span> Analytics</button><div class="nav-section-label">Manage</div><button class="nav-item"><span class="nav-icon">👥</span> Users</button><button class="nav-item"><span class="nav-icon">📖</span> Recipes</button></nav>
+      <div class="sidebar-footer"><button class="nav-item" onclick="logoutUser()" style="color:rgba(255,150,150,0.6);"><span class="nav-icon">🚪</span> Sign Out</button></div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-left"><div class="greeting-text">Admin <em style="color:var(--admin-accent)">Dashboard</em></div><div class="topbar-date" id="admin-date-display"></div></div>
+        <div class="topbar-actions"><button class="icon-btn">🔔</button><button class="icon-btn">⚙️</button></div>
+      </header>
+
+      <div class="content">
+        <div class="admin-stats-grid">
+          <div class="stat-card"><span class="stat-card-icon">👥</span><div class="stat-value" id="admin-total-users">—</div><div class="stat-label">Registered Users</div></div>
+          <div class="stat-card"><span class="stat-card-icon">💚</span><div class="stat-value" id="admin-total-revenue" style="color:#16a34a;">₱ —</div><div class="stat-label">Total Revenue</div></div>
+          <div class="stat-card"><span class="stat-card-icon">🏅</span><div class="stat-value" id="admin-total-points" style="color:var(--amber);">—</div><div class="stat-label">Points Sold</div></div>
+        </div>
+        
+        <div class="admin-main-grid">
+          <div>
+            <div class="section-header"><h2 class="section-title">System Users</h2></div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>User</th><th>Role</th><th>Joined</th></tr></thead>
+                <tbody id="admin-user-table"><tr><td colspan="3" style="text-align:center; color:var(--muted); padding:28px;">Loading users...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+          <div>
+            <div class="section-header"><h2 class="section-title">Recent Transactions</h2></div>
+            <div class="widget" style="padding:0 22px;">
+              <div id="admin-transactions-list" class="activity-feed"></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 32px;">
+          <div class="section-header"><h2 class="section-title">Recipe Management</h2></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Author</th>
+                  <th>Recipe Title</th>
+                  <th>Category</th>
+                  <th>Date Posted</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="admin-posts-table">
+                <tr><td colspan="5" style="text-align:center; color:var(--muted); padding:28px;">Loading recipes...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div style="margin-top: 32px;">
+          <div class="section-header"><h2 class="section-title">Content Moderation Queue</h2></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Author</th>
+                  <th>Comment Snippet</th>
+                  <th>Target Post</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="admin-comments-table">
+                <tr><td colspan="5" style="text-align:center; color:var(--muted); padding:28px;">Loading the wire...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div> </div> </div>
+
+      <div class="modal-backdrop" id="adminPostModal">
+    <div class="modal" style="padding: 0; overflow: hidden; background: var(--bg);">
+      <div class="modal-header" style="padding: 20px 24px; background: var(--white); margin: 0; border-bottom: 1px solid var(--border);">
+        <div class="modal-title" style="font-size: 18px;">Post Inspection 👁️</div>
+        <button class="modal-close" onclick="document.getElementById('adminPostModal').classList.remove('open'); document.body.style.overflow='';">✕</button>
+      </div>
+      <div id="admin-post-preview-container" style="padding: 24px; max-height: 75vh; overflow-y: auto;">
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+</body>
+</html>
